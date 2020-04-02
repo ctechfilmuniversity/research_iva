@@ -5,7 +5,7 @@ affiliation: Film University Babelsberg KONRAD WOLF
 date: Summer term 20
 ---   -->
 
-Prof. Angela Brennecke, Creative Technologies, 03/2020
+Prof. Angela Brennecke, Creative Technologies, 03/2020  
 Contributors:  Markus Traber, BSc, CTech Master 
 
 ---
