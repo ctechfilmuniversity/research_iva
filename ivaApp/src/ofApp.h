@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "synth/ofSynth.h"
+#include "apps/firstApp.hpp"
+#include "apps/clausen.hpp"
 
 class ofApp : public ofBaseApp {
 
@@ -11,7 +13,7 @@ public:
     void update();
     void draw();
 
-    void audioOut(ofSoundBuffer &outBuffer);
+    //void audioOut(ofSoundBuffer &outBuffer);
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -27,29 +29,9 @@ public:
 
     
 private:
-
-    // Member functions
-
-    void drawHelpText();
-    void setupAudio();
+    ofBaseApp *currentApp;
+    firstApp theFirstApp;
+    clausen clausenApp;
     
-    // function bound to gui element
-    // therefore its scope is defined by ofEvent
-    // see ofEventUtils for further information
-    void updateFrequency(float& value);
-
-    
-    // Member variables
-    float rms{};
-    //float defaultFrequency{172.5};
-    ofSynth synth{};
-
-    bool changeFreq{false};
-    int initialMouseDistY{};
-
-    std::mutex audioMutex{};
-    ofSoundStream soundStream{};
-    ofSoundBuffer lastBuffer{};
-    ofPolyline waveform{};
-    
+    void switchApp(int key);
 };

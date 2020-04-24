@@ -1,1 +1,9 @@
 obj/*
+bin/*.app
+*.plist
+*.xcodeproj/*
+*.xcconfig
+*.pbxproj
+*.xcworkspacedata
+
+*.code-workspace
