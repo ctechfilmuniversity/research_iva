@@ -4,10 +4,12 @@
 
 #pragma once
 
-#include "ofMain.h"
-#include "ofxOpenCv.h"
+//#include "ofMain.h"
+//#include "ofxOpenCv.h"
+#include "ivaApp.h"
 
-class clausen : public ofBaseApp{
+//class clausen : public ofBaseApp{
+class clausen : public ivaApp {
 public:
     
     void setup();
@@ -23,11 +25,13 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-
+    
+    
+    void shutdownApp();
     
     //----------------------------------------------------------
 
-    
+private:
     int fboSize, index;
     
     ofVideoGrabber grabber;
@@ -51,5 +55,7 @@ public:
     int width;
     int height;
     
+    
+    void resetData();
 
 };

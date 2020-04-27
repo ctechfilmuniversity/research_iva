@@ -205,3 +205,8 @@ void firstApp::updateFrequency(float& value) {
     
     synth.setFrequency(value);
 };
+
+void firstApp::shutdownApp() {
+    soundStream.close();
+    lastBuffer.clear();
+}

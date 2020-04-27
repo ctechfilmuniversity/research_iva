@@ -15,10 +15,11 @@
 
 #pragma once
 
-#include "ofMain.h"
+//#include "ofMain.h"
 #include "synth/ofSynth.h"
+#include "ivaApp.h"
 
-class firstApp : public ofBaseApp {
+class firstApp : public ivaApp {
 
 public:
     
@@ -40,7 +41,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    
+    void shutdownApp();
 private:
 
     // Member functions

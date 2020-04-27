@@ -25,7 +25,8 @@ void clausen::setup(){
     // mapping of texture coordinates
     
     fboSize = width;
-    index = 0;
+    
+    resetData();
     
     fbo.allocate(fboSize, fboSize);
 
@@ -160,9 +161,7 @@ void clausen::debugDraw(){
 //--------------------------------------------------------------
 void clausen::keyPressed(int key){
     if (key == 'n') {
-        index = 0;
-        captured = false;
-        filtered = false;
+        resetData();
     }
     
     /*
@@ -259,4 +258,16 @@ void clausen::audioOut(float * output, int bufferSize, int nChannels){
     }
     
     return;
+}
+
+void clausen::shutdownApp() {
+    soundStream.close();
+    grabber.close();
+    resetData();
+}
+
+void clausen::resetData() {
+    index = 0;
+    captured = false;
+    filtered = false;
 }

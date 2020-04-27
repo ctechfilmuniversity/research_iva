@@ -29,7 +29,8 @@ public:
 
     
 private:
-    ofBaseApp *currentApp;
+    ivaApp *currentApp;
+    
     firstApp theFirstApp;
     clausen clausenApp;
     

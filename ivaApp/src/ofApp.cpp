@@ -30,6 +30,7 @@ void ofApp::draw() {
 void ofApp::keyPressed(int key){
     if (key == '1' || key == '2') {
         switchApp(key);
+        return;
     }
     currentApp->keyPressed(key);
 }
@@ -86,7 +87,9 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void ofApp::switchApp(int key){
-    cout << "## switchApp" << key << endl;
+    cout << "## switchApp called" << endl;
+    cout << "## switchApp shutting down current app" << endl;
+    currentApp->shutdownApp();
     switch (key) {
         case '1':
         default:
