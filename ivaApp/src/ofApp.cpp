@@ -32,6 +32,7 @@ void ofApp::keyPressed(int key){
         case '2':
         case '3':
         case '4':
+        case '5':
             switchApp(key);
             return;
         default:
@@ -109,7 +110,14 @@ void ofApp::switchApp(int key){
         case '4':
             currentApp = &stimbergApp;
             break;
+        case '5':
+            currentApp = &dittmannApp;
+            break;
     }
+    
+    // Reset Window Shape to original shape
+    ofSetWindowShape(512, 384);
+    
     cout << "## Calling setup function of new app" << endl;
     currentApp->setup();
 }

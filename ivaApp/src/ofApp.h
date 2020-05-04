@@ -6,6 +6,7 @@
 #include "apps/clausen.hpp"
 #include "apps/traber.h"
 #include "apps/stimberg.h"
+#include "apps/dittmann.h"
 
 
 
@@ -39,6 +40,7 @@ private:
     clausen clausenApp;
     traber traberApp;
     stimberg stimbergApp;
+    dittmann dittmannApp;
     
     void switchApp(int key);
 };
