@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "ofMain.h"
+//#include "ofMain.h"
 #include "ofxOpenCv.h"
-#include "synth/ofSynth.h"
+#include "ofSynth.h"
 #include "ivaApp.h"
 
 class traber : public ivaApp {

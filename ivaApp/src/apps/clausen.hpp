@@ -5,7 +5,7 @@
 #pragma once
 
 //#include "ofMain.h"
-//#include "ofxOpenCv.h"
+#include "ofxOpenCv.h"
 #include "ivaApp.h"
 
 //class clausen : public ofBaseApp{

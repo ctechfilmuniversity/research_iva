@@ -13,7 +13,6 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     currentApp->update();
-    
 }
 
 //--------------------------------------------------------------
@@ -32,6 +31,7 @@ void ofApp::keyPressed(int key){
         case '1':
         case '2':
         case '3':
+        case '4':
             switchApp(key);
             return;
         default:
@@ -105,6 +105,9 @@ void ofApp::switchApp(int key){
             break;
         case '3':
             currentApp = &traberApp;
+            break;
+        case '4':
+            currentApp = &stimbergApp;
             break;
     }
     cout << "## Calling setup function of new app" << endl;

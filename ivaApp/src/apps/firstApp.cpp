@@ -1,10 +1,3 @@
-//
-//  firstApp.cpp
-//  ivaApp
-//
-//  Created by Markus Traber on 24.04.20.
-//
-
 #include "firstApp.hpp"
 
 

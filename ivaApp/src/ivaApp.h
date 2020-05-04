@@ -9,8 +9,6 @@
 #define ivaApp_h
 
 #include "ofMain.h"
-#include "ofxOpenCv.h"
-
 
 class ivaApp : public ofBaseApp {
     

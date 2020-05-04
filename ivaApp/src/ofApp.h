@@ -5,6 +5,9 @@
 #include "apps/firstApp.hpp"
 #include "apps/clausen.hpp"
 #include "apps/traber.h"
+#include "apps/stimberg.h"
+
+
 
 class ofApp : public ofBaseApp {
 
@@ -35,6 +38,7 @@ private:
     firstApp theFirstApp;
     clausen clausenApp;
     traber traberApp;
+    stimberg stimbergApp;
     
     void switchApp(int key);
 };

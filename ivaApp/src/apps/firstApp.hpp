@@ -1,10 +1,3 @@
-//
-//  firstApp.hpp
-//  ivaApp
-//
-//  Created by Markus Traber on 24.04.20.
-//
-
 #ifndef firstApp_hpp
 #define firstApp_hpp
 
@@ -16,7 +9,7 @@
 #pragma once
 
 //#include "ofMain.h"
-#include "synth/ofSynth.h"
+#include "ofSynth.h"
 #include "ivaApp.h"
 
 class firstApp : public ivaApp {
