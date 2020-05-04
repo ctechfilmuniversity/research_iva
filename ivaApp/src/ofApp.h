@@ -4,6 +4,7 @@
 #include "synth/ofSynth.h"
 #include "apps/firstApp.hpp"
 #include "apps/clausen.hpp"
+#include "apps/traber.h"
 
 class ofApp : public ofBaseApp {
 
@@ -33,6 +34,7 @@ private:
     
     firstApp theFirstApp;
     clausen clausenApp;
+    traber traberApp;
     
     void switchApp(int key);
 };

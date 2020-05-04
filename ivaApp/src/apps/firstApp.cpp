@@ -10,7 +10,6 @@
 
 //--------------------------------------------------------------
 void firstApp::setup(){
-    cout << "## Setup firstApp" << endl;
     //ofSetLogLevel(OF_LOG_VERBOSE);
     ofSetVerticalSync(true);
     

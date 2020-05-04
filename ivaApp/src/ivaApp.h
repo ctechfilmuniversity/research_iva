@@ -11,6 +11,7 @@
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 
+
 class ivaApp : public ofBaseApp {
     
 public:

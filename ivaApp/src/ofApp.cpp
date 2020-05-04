@@ -28,9 +28,14 @@ void ofApp::draw() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    if (key == '1' || key == '2') {
-        switchApp(key);
-        return;
+    switch (key) {
+        case '1':
+        case '2':
+        case '3':
+            switchApp(key);
+            return;
+        default:
+            break;
     }
     currentApp->keyPressed(key);
 }
@@ -97,6 +102,11 @@ void ofApp::switchApp(int key){
             break;
         case '2':
             currentApp = &clausenApp;
+            break;
+        case '3':
+            currentApp = &traberApp;
+            break;
     }
+    cout << "## Calling setup function of new app" << endl;
     currentApp->setup();
 }
