@@ -15,6 +15,8 @@
 
 class ofDCO {
     
+public:
+    
     enum OscillatorType {
         SINE,
         PULSE,
@@ -22,8 +24,7 @@ class ofDCO {
         SAWTOOTH
     };
     
-public:
-    
+
     ofDCO(OscillatorType type = SINE);
     virtual ~ofDCO(){};
     
