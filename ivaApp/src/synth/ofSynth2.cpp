@@ -43,16 +43,16 @@ void ofSynth2::fillSoundBuffer(ofSoundBuffer& outBuffer) {
 }
 
 void ofSynth2::setFrequency(const int& id, const float& freq) {
-//    if (oscillators.size() < id) {
-//        return;
-//    }
+    //    if (oscillators.size() < id) {
+    //        return;
+    //    }
     oscillators.at(id).setFrequency(freq);
 }
 
 float ofSynth2::getFrequency(const int& id) {
-//    if (oscillators.size() < id) {
-//        return -1;
-//    }
+    //    if (oscillators.size() < id) {
+    //        return -1;
+    //    }
     return oscillators.at(id).getFrequency();
 }
 
@@ -70,6 +70,14 @@ void ofSynth2::setSampleRate(const int& id, const float& sampleRate){
 
 float ofSynth2::getSampleRate(const int& id){
     return oscillators.at(id).getSampleRate();
+}
+
+void ofSynth2::setAmplitude(const int& id, const float& rate) {
+    oscillators.at(id).setSampleRate(rate);
+}
+
+float ofSynth2::getAmplitude(const int& id){
+    return oscillators.at(id).getAmplitude();
 }
 
 int ofSynth2::addOscillator(const ofDCO::OscillatorType oscillatorType) {

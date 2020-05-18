@@ -65,6 +65,15 @@ public:
     /// @param id The id of the oscillator
     float getSampleRate(const int& id);
     
+    /// Set the amplitude of an oscillator
+    /// @param id The id of the oscillator
+    /// @param freq The frequency you want to set
+    void setAmplitude(const int& id, const float& rate);
+    
+    /// Get the amplitude of an oscillator
+    /// @param id The id of the oscillator
+    float getAmplitude(const int& id);
+    
     /// Add an oscillator to the synth with default parameters, returns index of oscillator
     /// @param oscillatorType Type of oscillator you want to create
     int addOscillator(const ofDCO::OscillatorType oscillatorType);
