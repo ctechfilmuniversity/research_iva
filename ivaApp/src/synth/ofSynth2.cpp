@@ -10,6 +10,9 @@
 //
 // Constructors
 //
+ofSynth2::ofSynth2()
+{
+}
 
 //
 // Private functions
@@ -26,15 +29,18 @@ void ofSynth2::fillSoundBuffer(ofSoundBuffer& outBuffer) {
     auto sampleRate = outBuffer.getSampleRate();
        
     for(auto i = 0; i < outBuffer.getNumFrames(); i++) {
-        auto sampleFull = 0;
-        
+        float sampleFull;
+
         for (auto &osc : oscillators) {
             sampleFull += osc.generate();
         }
+
         
         // reduce the full sample's volume so it doesn't exceed 1
-        //sampleFull *= 0.4;
-        //sampleFull = ofClamp(sampleFull, -.9f, .9f);
+        sampleFull *= 0.5;
+        sampleFull = ofClamp(sampleFull, -.9f, .9f);
+        
+        //std::cout << i << " sample: " << sampleFull;
         
         // write the computed sample to the left and right channels
         outBuffer.getSample(i, 0) = sampleFull;
@@ -73,7 +79,7 @@ float ofSynth2::getSampleRate(const int& id){
 }
 
 void ofSynth2::setAmplitude(const int& id, const float& rate) {
-    oscillators.at(id).setSampleRate(rate);
+    oscillators.at(id).setAmplitude(rate);
 }
 
 float ofSynth2::getAmplitude(const int& id){
@@ -81,7 +87,7 @@ float ofSynth2::getAmplitude(const int& id){
 }
 
 int ofSynth2::addOscillator(const ofDCO::OscillatorType oscillatorType) {
-    addOscillator(oscillatorType, SAMPLE_RATE, FUNDAMENTAL_FREQ, AMPLITUDE);
+    return addOscillator(oscillatorType, SAMPLE_RATE, FUNDAMENTAL_FREQ, AMPLITUDE);
 }
 
 int ofSynth2::addOscillator(const ofDCO::OscillatorType oscillatorType, const float sampleRate, const float frequency, const float amplitude) {

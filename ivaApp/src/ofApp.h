@@ -9,7 +9,6 @@
 #include "apps/dittmann.h"
 
 
-
 class ofApp : public ofBaseApp {
 
 public:
@@ -41,6 +40,7 @@ private:
     traber traberApp;
     stimberg stimbergApp;
     dittmann dittmannApp;
+    
     
     void switchApp(int key);
 };

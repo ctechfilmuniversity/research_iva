@@ -71,7 +71,6 @@ void ofSynthStimberg::setupOscillators(int numOsc) {
     for (int i = 0; i < numOsc; i++) {
         sineOsc.push_back(ofDCOSine());
         sineOsc[i].setup(sampleRate, fundamentalFreq, 0.0);
-        
     }
 
 //    sineWaveOscill.setup(sampleRate, fundamentalFreq, 0.3);

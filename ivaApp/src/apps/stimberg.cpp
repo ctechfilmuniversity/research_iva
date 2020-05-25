@@ -5,61 +5,54 @@
 //using namespace ofxCv;
 //using namespace cv;
 
-void stimberg::setup()
-{
-	ofSetVerticalSync(true);
+void stimberg::setup() {
+    ofSetVerticalSync(true);
 //    ofSetFrameRate(120);
-	cam.setup(640, 480);
-	
-//	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-	stepSize = 10;
-	ySteps = cam.getHeight() / stepSize;
-	xSteps = cam.getWidth() / stepSize;
+    cam.setup(640, 480);
+    
+//    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    stepSize = 10;
+    ySteps = cam.getHeight() / stepSize;
+    xSteps = cam.getWidth() / stepSize;
     
     
-	for (int y = 0; y < ySteps; y++)
+    for (int y = 0; y < ySteps; y++)
     {
-		for (int x = 0; x < xSteps; x++)
+        for (int x = 0; x < xSteps; x++)
         {
             flowAmount.push_back(ofVec2f(0,0));
-		}
-	}
-    
-//    synth = ofSynth(4);
-    
+        }
+    }
     
     
     setupAudio();
     
     ofHideCursor();
     
-    
-    int oscNums = 4;
-    
     float freq1 = 110;
-    synth.setFrequency(1, freq1);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq1, 0.0);
     
     float freq2 = 220 * pow(2,(3/12.f));
-    synth.setFrequency(2, freq2);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq2, 0.0);
     
     float freq3 = 220 * pow(2,(10/12.f));
-    synth.setFrequency(3, freq3);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq3, 0.0);
     
     float freq4 = 220 * pow(2,(7/12.f));
-    synth.setFrequency(4, freq4);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq4, 0.0);
    
-
     float freq5 = 55;
-    synth.setFrequency(5, freq5);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq5, 0.0);
 
     float freq6 = 220 * pow(2,(19/12.f));
-    synth.setFrequency(6, freq6);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq6, 0.0);
 
     float freq7 = 220 * pow(2,(14/12.f));
-    synth.setFrequency(7, freq7);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq7, 0.0);
 
     float freq8 = 220 * pow(2,(15/12.f));
-    synth.setFrequency(8, freq8);
+    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq8, 0.0);
+
     
     
     
@@ -75,7 +68,7 @@ void stimberg::setup()
 
 void stimberg::update()
 {
-	cam.update();
+    cam.update();
 
     if(cam.isFrameNew())
     {
@@ -89,12 +82,12 @@ void stimberg::update()
         
         
         // TODO: add documentation
-		flow.setWindowSize(stepSize);
-		flow.calcOpticalFlow(colorImg);
+        flow.setWindowSize(stepSize);
+        flow.calcOpticalFlow(colorImg);
         
-		int i = 0;
+        int i = 0;
         int iTotal = xSteps * ySteps;
-		float distortionStrength = 6;
+        float distortionStrength = 6;
         
 //        vector<float> newAmp[8];
         float newAmp[8] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -103,12 +96,12 @@ void stimberg::update()
 //            newAmp[i] = 0.0;
 //        }
         
-		for(int y = 1; y + 1 < ySteps; y++)
+        for(int y = 1; y + 1 < ySteps; y++)
         {
-			for(int x = 1; x + 1 < xSteps; x++)
+            for(int x = 1; x + 1 < xSteps; x++)
             {
                 
-				int i = y * xSteps + x;
+                int i = y * xSteps + x;
                 glm::vec2 position(x * stepSize, y * stepSize);
                 ofRectangle area(position - glm::vec2(stepSize, stepSize) / 2, stepSize, stepSize);
 //                glm::vec2 offset = flow.getTotalFlowInRegion(area);
@@ -127,7 +120,7 @@ void stimberg::update()
 //                    ofVec2f v2(0,1);
                     float angle = v1.angle(offset)+180;
                     
-                    ofLogNotice(ofToString(angle));
+                    //ofLogNotice(ofToString(angle));
 
                     
                     if (angle < 90) {
@@ -148,16 +141,18 @@ void stimberg::update()
                 flowAmount[i] = offset;
                 
 //                mesh.setVertex(i, glm::vec3(position + distortionStrength * offset, 0));
-				i++;
-			}
-		}
+                i++;
+            }
+        }
         
 //        ofLogNotice(ofToString(oscAmp));
         
         for (int i = 0; i < 8; i++) {
-            float amp = synth.getAmplitude(i) * 0.8 + newAmp[i] * 0.2;
+            float amp = synth2.getAmplitude(i) * 0.8 + newAmp[i] * 0.2;
+            
+            cout << "amp: " << amp << " i:" << i << endl;
 //            float amp = ofLerp(synth.getAmplitude(i), newAmp[i], 0.1);
-            synth.setAmplitude(i, amp);
+            synth2.setAmplitude(i, amp);
         }
         
         
@@ -167,7 +162,7 @@ void stimberg::update()
 //        synthAmp4 = synthAmp4 * 0.7 + newAmp4 * 0.3;
         
 
-	}
+    }
     
 //    synth1.setAmplitude(1, synthAmp1);
 //    synth1.setAmplitude(3, synthAmp1);
@@ -178,15 +173,15 @@ void stimberg::update()
 void stimberg::draw()
 {
     
-	ofBackground(0);
-	//ofScale(2.0, 2.0);
+    ofBackground(0);
+    //ofScale(2.0, 2.0);
 
     // TODO: What is happening here?
     // Why is this call necessary? What is the result?
     // Why don't you simply call cam.draw() instead?
     // What might be an additional use case for texture binding?
 //    cam.getTexture().bind();
-//	mesh.draw();
+//    mesh.draw();
     
 //    grayImg.draw(680,0);
 //    cam.draw(680,0);
@@ -221,11 +216,11 @@ void stimberg::draw()
 //    cam.getTexture().unbind();
     
     
-	if (! ofGetMousePressed() )
+    if (! ofGetMousePressed() )
     {
-		//mesh.drawFaces();
+        //mesh.drawFaces();
 //        mesh.drawWireframe();
-	}
+    }
 }
 
 
@@ -233,8 +228,8 @@ void stimberg::draw()
 //--------------------------------------------------------------
 void stimberg::audioOut(ofSoundBuffer &outBuffer) {
     
-    synth.updateSoundBuffer(outBuffer);
-
+    //synth.updateSoundBuffer(outBuffer);
+    synth2.fillSoundBuffer(outBuffer);
     
     // THREAD INFO
     // lock_name is the "var" name of the lock guard, kind of

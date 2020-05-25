@@ -113,6 +113,7 @@ void ofApp::switchApp(int key){
         case '5':
             currentApp = &dittmannApp;
             break;
+            
     }
     
     // Reset Window Shape to original shape
