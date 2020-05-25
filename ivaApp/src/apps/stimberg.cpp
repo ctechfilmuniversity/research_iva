@@ -271,4 +271,5 @@ void stimberg::shutdownApp(){
     lastBuffer.clear();
     cam.close();
     audioMutex.unlock();
+    synth2.reset();
 }

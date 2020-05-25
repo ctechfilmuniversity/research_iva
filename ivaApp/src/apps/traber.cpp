@@ -208,12 +208,13 @@ void traber::setupAudio() {
 //
 //        synths.insert(synths.end(),currSynth);
 //    }
-    synth.setSampleRate(settings.sampleRate);
+    synth.addOscillator(ofDCO::SINE);
+    synth.setSampleRate(0, settings.sampleRate);
 }
 
 //--------------------------------------------------------------
 void traber::updateFrequency(int& tone) {
-    synth.setFrequency(220 * pow(2,(synthTones.at(tone)/12.f)));
+    synth.setFrequency(0, 220 * pow(2,(synthTones.at(tone)/12.f)));
 };
 
 void traber::keyPressed(int key){
@@ -265,4 +266,5 @@ void traber::shutdownApp(){
     fbo.clear();
     grayImage.clear();
     audioMutex.unlock();
+    synth.reset();
 }

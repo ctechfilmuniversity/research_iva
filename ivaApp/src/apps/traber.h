@@ -6,7 +6,7 @@
 
 //#include "ofMain.h"
 #include "ofxOpenCv.h"
-#include "ofSynth.h"
+#include "ofSynth2.hpp"
 #include "ivaApp.h"
 
 class traber : public ivaApp {
@@ -55,7 +55,7 @@ private:
     // see ofEventUtils for further information
     void updateGui(float& value);
     
-    ofSynth synth{};
+    ofSynth2 synth{};
     //std::vector<ofSynth> synths;
     std::vector<int> synthTones {-5, -2, 0, 3, 5, 7, 10, 12, 15};
     

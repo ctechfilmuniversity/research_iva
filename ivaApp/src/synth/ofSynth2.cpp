@@ -94,6 +94,12 @@ int ofSynth2::addOscillator(const ofDCO::OscillatorType oscillatorType, const fl
     ofDCO dco{oscillatorType};
     dco.setup(sampleRate, frequency, amplitude);
     oscillators.push_back(dco);
+    
+    //std::cout << "curr num osc: " << oscillators.size() << std::endl;
     return oscillators.size() - 1;
 }
 
+/// Reset synth
+void ofSynth2::reset() {
+    oscillators.clear();
+}
