@@ -21,11 +21,13 @@
 class ofSynth2 {
     
 private:
-    static constexpr float FREQ_INCREASE_FACTOR = 10.0;
-    static constexpr float FREQ_DECREASE_FACTOR = -10.0;
+//    static constexpr float FREQ_INCREASE_FACTOR = 10.0;
+//    static constexpr float FREQ_DECREASE_FACTOR = -10.0;
     std::vector<ofDCO> oscillators;
     
     void changeFrequencyBy(const int& id, const float& factor);
+    
+    
 public:
     static constexpr float FUNDAMENTAL_FREQ = 172.5;
     static constexpr float SAMPLE_RATE = 44100.0;
@@ -73,6 +75,15 @@ public:
     /// Get the amplitude of an oscillator
     /// @param id The id of the oscillator
     float getAmplitude(const int& id);
+    
+    /// Set the phase modifier of an oscillator
+    /// @param id The id of the oscillator
+    /// @param freq The frequency you want to set
+    void setPhaseModifier(const int& id, const float& rate);
+    
+    /// Get the phase modifier of an oscillator
+    /// @param id The id of the oscillator
+    float getPhaseModifier(const int& id);
     
     /// Add an oscillator to the synth with default parameters, returns index of oscillator
     /// @param oscillatorType Type of oscillator you want to create

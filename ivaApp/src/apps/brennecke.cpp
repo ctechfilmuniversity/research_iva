@@ -1,8 +1,8 @@
-#include "firstApp.hpp"
+#include "brennecke.hpp"
 
 
 //--------------------------------------------------------------
-void firstApp::setup(){
+void brennecke::setup(){
     //ofSetLogLevel(OF_LOG_VERBOSE);
     ofSetVerticalSync(true);
     
@@ -10,7 +10,7 @@ void firstApp::setup(){
 }
 
 //--------------------------------------------------------------
-void firstApp::update(){
+void brennecke::update(){
     
     // "lastBuffer" is shared between update() and audioOut(), which are called
     // on two different threads. This lock makes sure we don't use lastBuffer
@@ -36,7 +36,7 @@ void firstApp::update(){
 }
 
 //--------------------------------------------------------------
-void firstApp::draw() {
+void brennecke::draw() {
     
     ofBackground(ofColor::black);
     ofSetColor(ofColor::white);
@@ -47,7 +47,7 @@ void firstApp::draw() {
 }
 
 //--------------------------------------------------------------
-void firstApp::audioOut(ofSoundBuffer &outBuffer) {
+void brennecke::audioOut(ofSoundBuffer &outBuffer) {
     
     synth.fillSoundBuffer(outBuffer);
     
@@ -56,7 +56,7 @@ void firstApp::audioOut(ofSoundBuffer &outBuffer) {
 }
 
 //--------------------------------------------------------------
-void firstApp::keyPressed(int key){
+void brennecke::keyPressed(int key){
     
     if (key == 'f' && !changeFreq) {
         
@@ -64,8 +64,7 @@ void firstApp::keyPressed(int key){
         initialMouseDistY = ofGetMouseY() - ofGetWindowPositionY();
     }
     else if (key == 'r') {
-        
-        auto freq = synth.getFrequency(true); // get fundamental freq
+        auto freq = synth.FUNDAMENTAL_FREQ; // get fundamental freq
         updateFrequency( freq );
     }
     else if (key == '1') {
@@ -88,12 +87,12 @@ void firstApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void firstApp::keyReleased(int key){
+void brennecke::keyReleased(int key){
     
     if (key == 'f') {
         
         changeFreq = false;
-        std::cout << "<<<<<  Freq: " << synth.getFrequency() << std::endl;
+        std::cout << "<<<<<  Freq: " << synth.getFrequency(id_sine1) << std::endl;
         std::cout << "<<<<<  FrameRate: " << ofGetFrameRate() << std::endl;
         std::cout << "<<<<<  FrameNum: " << ofGetFrameNum() << std::endl;
         std::cout << "<<<<<  ElapsedTime: " << ofGetElapsedTimef() << std::endl;
@@ -101,7 +100,7 @@ void firstApp::keyReleased(int key){
 }
 
 //--------------------------------------------------------------
-void firstApp::mouseMoved(int x, int y ){
+void brennecke::mouseMoved(int x, int y ){
 
     if (changeFreq) {
         
@@ -110,10 +109,10 @@ void firstApp::mouseMoved(int x, int y ){
         // only if we have actually moved the mouse
         if (currentMouseDistY != initialMouseDistY) {
             
-            if (currentMouseDistY > initialMouseDistY) synth.increaseFrequency();
-            if (currentMouseDistY < initialMouseDistY) synth.decreaseFrequency();
+            if (currentMouseDistY > initialMouseDistY) synth.increaseFrequency(id_sine1);
+            if (currentMouseDistY < initialMouseDistY) synth.decreaseFrequency(id_sine1);
             
-            float frequency = ofClamp(synth.getFrequency(), 0.0, 20000.0);
+            float frequency = ofClamp(synth.getFrequency(id_sine1), 0.0, 20000.0);
             updateFrequency(frequency);
             
             initialMouseDistY = currentMouseDistY;
@@ -122,62 +121,62 @@ void firstApp::mouseMoved(int x, int y ){
 }
 
 //--------------------------------------------------------------
-void firstApp::mouseDragged(int x, int y, int button){
+void brennecke::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::mousePressed(int x, int y, int button){
+void brennecke::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::mouseReleased(int x, int y, int button){
+void brennecke::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::mouseEntered(int x, int y){
+void brennecke::mouseEntered(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::mouseExited(int x, int y){
+void brennecke::mouseExited(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::windowResized(int w, int h){
+void brennecke::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::gotMessage(ofMessage msg){
+void brennecke::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::dragEvent(ofDragInfo dragInfo){
+void brennecke::dragEvent(ofDragInfo dragInfo){
 
 }
 
 //--------------------------------------------------------------
-void firstApp::drawHelpText() {
+void brennecke::drawHelpText() {
  
-    std::string freqString = std::to_string(synth.getFrequency());
+    std::string freqString = std::to_string(synth.getFrequency(id_sine1));
     ofDrawBitmapString("Press 'f' and move the mouse in y-direction.", 25, 25);
     ofDrawBitmapString("Press 'r' to reset the frequency.", 25, 40);
     ofDrawBitmapString("Current frequency: " + freqString, 25, 75);
 }
 
 //--------------------------------------------------------------
-void firstApp::setupAudio() {
+void brennecke::setupAudio() {
     
     // start the sound stream with a sample rate of 44100 Hz, and a buffer
     // size of 512 samples per audioOut() call
     ofSoundStreamSettings settings;
     settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
+    settings.sampleRate = synth.SAMPLE_RATE;
     settings.bufferSize = 512;
     settings.numBuffers = 4;
     settings.setOutListener(this);
@@ -189,16 +188,32 @@ void firstApp::setupAudio() {
     // - start the stream and hence have a continious connection to audio in & out
     soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
     
-    synth.setSampleRate(settings.sampleRate);
+    // Setup all oscillators
+    id_sine1 = synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.3);
+    id_sine2 = synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.0);
+    id_sine3 = synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, 200, 0.5);
+    id_sine4 = synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.0);
+    
+//    id_sawtooth = synth.addOscillator(ofDCO::SAWTOOTH, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.75);
+//    id_triangle = synth.addOscillator(ofDCO::TRIANGLE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.3);
+//
+//    id_pulse1 = synth.addOscillator(ofDCO::PULSE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.3);
+//    id_pulse2 = synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.3);
+//
+//    synth.setPhaseModifier(id_pulse1, 0.98);
+//    synth.setPhaseModifier(id_pulse2, 3.98);
+    
 }
 
 //--------------------------------------------------------------
-void firstApp::updateFrequency(float& value) {
+void brennecke::updateFrequency(float& value) {
     
-    synth.setFrequency(value);
+    synth.setFrequency(id_sine1, value);
 };
 
-void firstApp::shutdownApp() {
+void brennecke::shutdownApp() {
     soundStream.close();
     lastBuffer.clear();
+    synth.reset();
 }
+

@@ -63,11 +63,11 @@ float ofSynth2::getFrequency(const int& id) {
 }
 
 void ofSynth2::increaseFrequency(const int& id) {
-    changeFrequencyBy(id, FREQ_INCREASE_FACTOR);
+    changeFrequencyBy(id, 10.0);
 }
 
 void ofSynth2::decreaseFrequency(const int& id) {
-    changeFrequencyBy(id, FREQ_DECREASE_FACTOR);
+    changeFrequencyBy(id, -10.0);
 }
 
 void ofSynth2::setSampleRate(const int& id, const float& sampleRate){
@@ -84,6 +84,14 @@ void ofSynth2::setAmplitude(const int& id, const float& rate) {
 
 float ofSynth2::getAmplitude(const int& id){
     return oscillators.at(id).getAmplitude();
+}
+
+void ofSynth2::setPhaseModifier(const int& id, const float& rate) {
+    oscillators.at(id).setPhaseModifier(rate);
+}
+
+float ofSynth2::getPhaseModifier(const int& id){
+    return oscillators.at(id).getPhaseModifier();
 }
 
 int ofSynth2::addOscillator(const ofDCO::OscillatorType oscillatorType) {

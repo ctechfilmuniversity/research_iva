@@ -4,7 +4,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    currentApp = &theFirstApp;
+    currentApp = &brenneckeApp;
     //theFirstApp.setup();
     currentApp->setup();
 }
@@ -99,7 +99,7 @@ void ofApp::switchApp(int key){
     switch (key) {
         case '1':
         default:
-            currentApp = &theFirstApp;
+            currentApp = &brenneckeApp;
             break;
         case '2':
             currentApp = &clausenApp;

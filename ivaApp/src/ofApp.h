@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "synth/ofSynth.h"
-#include "apps/firstApp.hpp"
+#include "apps/brennecke.hpp"
 #include "apps/clausen.hpp"
 #include "apps/traber.h"
 #include "apps/stimberg.h"
@@ -35,7 +35,7 @@ public:
 private:
     ivaApp *currentApp;
     
-    firstApp theFirstApp;
+    brennecke brenneckeApp;
     clausen clausenApp;
     traber traberApp;
     stimberg stimbergApp;

@@ -1,18 +1,19 @@
-#ifndef firstApp_hpp
-#define firstApp_hpp
+#ifndef brennecke_hpp
+#define brennecke_hpp
 
 #include <stdio.h>
 
-#endif /* firstApp_hpp */
+#endif /* brennecke_hpp */
 
 
 #pragma once
 
 //#include "ofMain.h"
-#include "ofSynth.h"
+#include "ofSynth2.hpp"
 #include "ivaApp.h"
 
-class firstApp : public ivaApp {
+
+class brennecke : public ivaApp {
 
 public:
     
@@ -51,7 +52,7 @@ private:
     // Member variables
     float rms{};
     //float defaultFrequency{172.5};
-    ofSynth synth{};
+    ofSynth2 synth{};
 
     bool changeFreq{false};
     int initialMouseDistY{};
@@ -60,5 +61,7 @@ private:
     ofSoundStream soundStream{};
     ofSoundBuffer lastBuffer{};
     ofPolyline waveform{};
+    
+    int id_sine1, id_sine2, id_sine3, id_sine4, id_pulse1, id_pulse2, id_sawtooth, id_triangle;
     
 };
