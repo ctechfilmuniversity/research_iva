@@ -34,13 +34,16 @@ void ofSynth2::fillSoundBuffer(ofSoundBuffer& outBuffer) {
         for(auto i = 1; i < oscillators.size(); i++) {
             sampleFull += oscillators[i].generate();
         }
-
+        
+//        if (sampleFull >= 1.0 || sampleFull <= -1.0) {
+//            std::cout << " sample: " << sampleFull << std::endl;
+//        }
         
         // reduce the full sample's volume so it doesn't exceed 1
         //sampleFull *= 0.5;
         //sampleFull = ofClamp(sampleFull, -.9f, .9f);
         
-        //std::cout << i << " sample: " << sampleFull;
+        //std::cout << i << " sample: " << sampleFull << std::endl;
         
         // write the computed sample to the left and right channels
         outBuffer.getSample(i, 0) = sampleFull;
@@ -105,6 +108,10 @@ int ofSynth2::addOscillator(const ofDCO::OscillatorType oscillatorType, const fl
     
     //std::cout << "curr num osc: " << oscillators.size() << std::endl;
     return oscillators.size() - 1;
+}
+
+int ofSynth2::getNumberOfOscillators(){
+    return oscillators.size();
 }
 
 /// Reset synth

@@ -3,7 +3,7 @@
 #include "ivaApp.h"
 #include "ofxGui.h"
 #include "ofxMidi.h"
-#include "ofSynthDittmann.h"
+#include "ofSynth2.hpp"
 
 class dittmann : public ivaApp, public ofxMidiListener
 {
@@ -45,7 +45,7 @@ class dittmann : public ivaApp, public ofxMidiListener
 
     // Member variables
     float rms{};
-    ofSynthDittmann synth{};
+    ofSynth2 synth{};
 
     // TODO: Correct the variable name
     bool changeAmp{false};

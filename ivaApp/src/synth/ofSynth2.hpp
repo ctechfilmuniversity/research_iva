@@ -96,6 +96,9 @@ public:
     /// @param amplitude Amplitude
     int addOscillator(const ofDCO::OscillatorType oscillatorType, const float sampleRate, const float fequency, const float amplitude);
     
+    /// Get the number of oscillators
+    int getNumberOfOscillators();
+    
     /// Reset synth
     void reset();
 

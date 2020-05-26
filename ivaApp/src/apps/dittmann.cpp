@@ -63,7 +63,7 @@ void dittmann::draw()
     auto stepSize = 10;
 
     // binning for rotation angles
-    const size_t brightnessSteps = synth.oscillators.size();
+    const size_t brightnessSteps = synth.getNumberOfOscillators();
     const float brightnessStepWidth = 255.0 / brightnessSteps;
 
     std::vector<Bin> bins;
@@ -108,7 +108,7 @@ void dittmann::draw()
     for (auto i = 0; i < bins.size(); i++)
     {
         float scale = (float)bins[i].count / (float)count;
-        synth.oscillators.at(i).setAmplitude(scale);
+        synth.setAmplitude(i, scale);
     }
 
     ofSetColor(ofColor::white);
@@ -124,7 +124,7 @@ void dittmann::draw()
 void dittmann::audioOut(ofSoundBuffer& outBuffer)
 {
 
-    synth.updateSoundBuffer(outBuffer);
+    synth.fillSoundBuffer(outBuffer);
 
     // THREAD INFO
     // lock_name is the "var" name of the lock guard, kind of
@@ -305,7 +305,7 @@ void dittmann::setupAudio()
     // size of 512 samples per audioOut() call
     ofSoundStreamSettings settings;
     settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
+    settings.sampleRate = synth.SAMPLE_RATE;
     settings.bufferSize = 512;
     settings.numBuffers = 4;
 
@@ -327,7 +327,15 @@ void dittmann::setupAudio()
     // - start the stream and hence have a continious connection to audio in & out
     soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
 
-    synth.setSampleRate(settings.sampleRate);
+    //synth.setSampleRate(settings.sampleRate);
+    
+    // Setup all oscs
+    const std::array<float, 20> frequencies = {
+    130.81, 164.81, 185.00, 196.00, 246.94, 261.63, 329.63, 369.99, 392.00, 493.88, 523.25, 659.25, 739.99, 783.99, 987.77, 1046.50, 1318.51, 1479.98, 1567.98, 1975.53};
+    
+    for (auto frequency : frequencies) {
+        synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, frequency, 1);
+    }
 }
 
 //--------------------------------------------------------------
@@ -403,4 +411,7 @@ void dittmann::shutdownApp(){
     lastBuffer.clear();
     grabber.close();
     audioMutex.unlock();
+    midiIn.removeListener(this);
+    midiIn.closePort();
+    synth.reset();
 }

@@ -150,7 +150,7 @@ void stimberg::update()
         for (int i = 0; i < 8; i++) {
             float amp = synth2.getAmplitude(i) * 0.8 + newAmp[i] * 0.2;
             
-            cout << "amp: " << amp << " i:" << i << endl;
+            //cout << "amp: " << amp << " i:" << i << endl;
 //            float amp = ofLerp(synth.getAmplitude(i), newAmp[i], 0.1);
             synth2.setAmplitude(i, amp);
         }
