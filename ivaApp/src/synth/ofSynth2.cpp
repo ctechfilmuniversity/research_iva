@@ -29,16 +29,16 @@ void ofSynth2::fillSoundBuffer(ofSoundBuffer& outBuffer) {
     auto sampleRate = outBuffer.getSampleRate();
        
     for(auto i = 0; i < outBuffer.getNumFrames(); i++) {
-        float sampleFull;
-
-        for (auto &osc : oscillators) {
-            sampleFull += osc.generate();
+        auto sampleFull = oscillators[0].generate();
+            
+        for(auto i = 1; i < oscillators.size(); i++) {
+            sampleFull += oscillators[i].generate();
         }
 
         
         // reduce the full sample's volume so it doesn't exceed 1
-        sampleFull *= 0.5;
-        sampleFull = ofClamp(sampleFull, -.9f, .9f);
+        //sampleFull *= 0.5;
+        //sampleFull = ofClamp(sampleFull, -.9f, .9f);
         
         //std::cout << i << " sample: " << sampleFull;
         

@@ -103,7 +103,7 @@ void traber::update(){
             }
             float meanBrightness = accumulatedBrightness / stepSize;
             
-            cout << "index " << i << " accumulatedBrightness " << accumulatedBrightness << " meanBrightness " << meanBrightness << "\n";
+            //cout << "index " << i << " accumulatedBrightness " << accumulatedBrightness << " meanBrightness " << meanBrightness << "\n";
             
             if (meanBrightness > currentMeanBrightness) {
                 currentMeanBrightness = meanBrightness;
@@ -112,7 +112,7 @@ void traber::update(){
             }
         }
         //cout << "toneIndex " << currentToneIndex << " amp " << currentAmp << "\n";
-        cout << "toneIndex " << currentToneIndex << "\n";
+        //cout << "toneIndex " << currentToneIndex << "\n";
         updateFrequency(currentToneIndex);
         
         // Increase index or
