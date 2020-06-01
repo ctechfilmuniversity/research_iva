@@ -33,13 +33,19 @@ void clausen::setup(){
     imageCv.allocate(512, 512);
     imageGray.allocate(512, 512);
     tex.allocate(512, 512, GL_RGB);
+
+    // start the sound stream with a sample rate of 44100 Hz, and a buffer
+    // size of 512 samples per audioOut() call
+    ofSoundStreamSettings settings;
+    settings.numOutputChannels = 2;
+    settings.sampleRate = 44100;
+    settings.bufferSize = 512;
+    settings.numBuffers = 4;
+    settings.setOutListener(this);
     
-    // TODO: Deprecated, please update and use to sound stream settings.
-    soundStream.setup(this, 2, 0, 44100, 512, 4);
+    soundStream.setup(settings);
     
     sampleCount = 0;
-    
-    
 }
 
 //--------------------------------------------------------------
@@ -240,19 +246,19 @@ void clausen::dragEvent(ofDragInfo dragInfo){
 
 }
 
-
-void clausen::audioOut(float * output, int bufferSize, int nChannels){
-    
+void clausen::audioOut(ofSoundBuffer &outBuffer){
     if(filtered) {
-    
-        for (int i = 0; i < bufferSize; i++){
-        
+        for (auto i = 0; i < outBuffer.getNumFrames(); i++) {
             float val = ofMap(pixelBuffer[sampleCount],0,255,-1,1);
-            output[i*nChannels    ] = val * 0.1;
-            output[i*nChannels + 1] = val * 0.1;
-        
+            
+            // output[i*nChannels    ] = val * 0.1;
+            // output[i*nChannels + 1] = val * 0.1;
+            
+            outBuffer.getSample(i, 0) = val * 0.1;
+            outBuffer.getSample(i, 1) = val * 0.1;
+            
             sampleCount++;
-        
+            
             sampleCount %= width*height;
         }
     }

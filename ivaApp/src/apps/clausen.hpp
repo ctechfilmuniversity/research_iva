@@ -26,10 +26,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    
     void shutdownApp();
-    
-    //----------------------------------------------------------
+    void audioOut(ofSoundBuffer &outBuffer);
 
 private:
     int fboSize, index;
@@ -49,7 +47,6 @@ private:
     unsigned char * pixelBuffer;
     
     ofSoundStream soundStream;
-    void audioOut(float * input, int bufferSize, int nChannels);
     int sampleCount;
     
     int width;
