@@ -28,13 +28,11 @@ void ofSynth2::changeFrequencyBy(const int& id, const float& factor) {
 void ofSynth2::fillSoundBuffer(ofSoundBuffer& outBuffer) {
     auto sampleRate = outBuffer.getSampleRate();
        
-    for(auto i = 0; i < outBuffer.getNumFrames(); i++) {
-        // TODO: This implementation works well but the way you write initialize sampleFull implies that there is something special about oscillator[0] .. I would, from the point of comprehensibility, not implement it this way but rather initialize sampleFull{0.0} and then have the for loop iterate over all oscillators alike. This maybe very high level complaining, but maybe you can reflect on it.
+    for (auto i = 0; i < outBuffer.getNumFrames(); i++) {
         
-        auto sampleFull = oscillators[0].generate();
-            
-        for(auto i = 1; i < oscillators.size(); i++) {
-            sampleFull += oscillators[i].generate();
+        auto sampleFull{0.0};
+        for (ofDCO osc : oscillators) {
+            sampleFull += osc.generate();
         }
         
 //        if (sampleFull >= 1.0 || sampleFull <= -1.0) {
