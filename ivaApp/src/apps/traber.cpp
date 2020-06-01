@@ -184,12 +184,17 @@ void traber::audioOut(ofSoundBuffer &outBuffer) {
 
 //--------------------------------------------------------------
 void traber::setupAudio() {
+    // TODO: The dropouts are likely to be caused by the buffer size being too small. Try again with 1024.
+    // I guess that the dropout is caused by the buffer not being filled fast enough. When playback / audio out reads from the buffer, there are empty spots, i.e., sample values jump from 0.75 (or whatever) to 0.0. This causes the dropout. It might as well be an amplitude value > 1.0/-1.0 but since this does not happen and would potentially sound slightly different, the reason might be a small buffer size. To investigate this further, please try to identify a recreation scenario and file that one as a bug report. Also, increase the buffer size and see whether this fixes the issue. Latency might be a negative sideeffect .. ; -) But let's see.
+    
+    // MT: Increased buffer size as suggested by Angela solved the problem for this app
+    
     // start the sound stream with a sample rate of 44100 Hz, and a buffer
     // size of 512 samples per audioOut() call
     ofSoundStreamSettings settings;
     settings.numOutputChannels = 2;
     settings.sampleRate = 44100;
-    settings.bufferSize = 512;
+    settings.bufferSize = 1024;
     settings.numBuffers = 4;
     settings.setOutListener(this);
     
