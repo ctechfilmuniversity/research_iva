@@ -29,6 +29,7 @@ void stimberg::setup() {
     
     ofHideCursor();
     
+    // TODO: This needs to be refactored into dedicated functions / objects. ATM low prio, please file an improvement request.
     float freq1 = 110;
     synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq1, 0.0);
     

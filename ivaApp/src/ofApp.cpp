@@ -4,6 +4,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    // TODO: Technically very well done, conceptually, I would like to change the approach of having several apps. To be discussed.
+
     currentApp = &brenneckeApp;
     //theFirstApp.setup();
     currentApp->setup();

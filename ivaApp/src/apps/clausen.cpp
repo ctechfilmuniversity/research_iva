@@ -34,7 +34,7 @@ void clausen::setup(){
     imageGray.allocate(512, 512);
     tex.allocate(512, 512, GL_RGB);
     
-    
+    // TODO: Deprecated, please update and use to sound stream settings.
     soundStream.setup(this, 2, 0, 44100, 512, 4);
     
     sampleCount = 0;

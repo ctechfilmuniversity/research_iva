@@ -31,6 +31,9 @@ void traber::setup(){
     setupAudio();
 }
 
+
+
+// TODO: This function is too large, break it down into readable packages.
 //--------------------------------------------------------------
 void traber::update(){
     // "lastBuffer" is shared between update() and audioOut(), which are called
