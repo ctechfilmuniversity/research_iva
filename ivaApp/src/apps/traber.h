@@ -59,9 +59,9 @@ private:
     //std::vector<ofSynth> synths;
     std::vector<int> synthTones {-5, -2, 0, 3, 5, 7, 10, 12, 15};
     
-    void updateFrequency(int& tone);
-        
-    //int numOscillators{6};
+    void updateFramebuffer();
+    void updateFrequency();
+    int calculateTone();
         
     // more info on using mutex and locks at
     // https://medium.com/swlh/c-mutex-write-your-first-concurrent-code-69ac8b332288

@@ -31,8 +31,6 @@ void traber::setup(){
     setupAudio();
 }
 
-
-
 // TODO: This function is too large, break it down into readable packages.
 //--------------------------------------------------------------
 void traber::update(){
@@ -43,85 +41,96 @@ void traber::update(){
     
     // Grab the camera feed
     // and check for new frames
-    
     grabber.update();
     if(grabber.isFrameNew()){
         
         // And draw a slice of the
         // new frame to the FBO
-        
-        float slice = grabber.getWidth() / float(fboSize);
-        float offset = grabber.getWidth() * 0.5;
-        
-        
-        ofPixels pixels;
-        
-        grabber.getTexture().readToPixels(pixels);
-        pixels.setImageType(OF_IMAGE_GRAYSCALE);
-        grayImage.setFromPixels(pixels);
-                
-        //grayImage.blurGaussian( 9 );
-        //grayImage.threshold(150);
-        
-        fbo.begin();
-            grabber.getTexture().drawSubsection(index, 0, slice, fboSize, offset, 0, 1, grabber.getHeight());
-//            grayImage.getTexture().drawSubsection(index, 0, slice, fboSize, offset, 0, 1, grabber.getHeight());
-        fbo.end();
-        
-        float limit = grayImage.getPixels().getColor(index, 0).limit();
-        //cout << limit << " limit \n";
-    
-        // introduced to avoid dependencies
-        auto stepSize{grabberHeight / 6};
-        
-//        for (int i = 0; i < grabberHeight; i += stepSize) {
-//
-//            float accumulatedBrightness = 0;
-//            for (int in = i; in < i+stepSize; in++) {
-//                accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
-//                //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
-//            }
-//            float meanBrightness = accumulatedBrightness / stepSize;
-//
-//            //cout << meanBrightness << "\n";
-//
-//            float amp = ofMap(meanBrightness, 0, limit, 0, 1);
-//            //cout << amp << " amp \n";
-//            int synthIndex = i / stepSize;
-//
-//            cout << "synth " << synthIndex << " amp " << amp << "\n";
-//
-//            synths.at(synthIndex).setOverallAmplitude(amp);
-//        }
-        
-        float currentMeanBrightness = 0;
-        //float currentAmp = 0;
-        int currentToneIndex = 0;
-        for (int i = 0; i < grabberHeight; i += stepSize) {
-            
-            float accumulatedBrightness = 0;
-            for (int in = i; in < i+stepSize; in++) {
-                accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
-                //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
-            }
-            float meanBrightness = accumulatedBrightness / stepSize;
-            
-            //cout << "index " << i << " accumulatedBrightness " << accumulatedBrightness << " meanBrightness " << meanBrightness << "\n";
-            
-            if (meanBrightness > currentMeanBrightness) {
-                currentMeanBrightness = meanBrightness;
-                //currentAmp = ofMap(meanBrightness, 0, limit, 0, 1);
-                currentToneIndex = i / stepSize;
-            }
-        }
-        //cout << "toneIndex " << currentToneIndex << " amp " << currentAmp << "\n";
-        //cout << "toneIndex " << currentToneIndex << "\n";
-        updateFrequency(currentToneIndex);
+        updateFramebuffer();
+        updateFrequency();
         
         // Increase index or
         // x-offset position
         index < fboSize ? index++ : index=0;
     }
+}
+
+//--------------------------------------------------------------
+void traber::updateFramebuffer() {
+    float slice = grabber.getWidth() / float(fboSize);
+    float offset = grabber.getWidth() * 0.5;
+    
+    
+    ofPixels pixels;
+    
+    grabber.getTexture().readToPixels(pixels);
+    pixels.setImageType(OF_IMAGE_GRAYSCALE);
+    grayImage.setFromPixels(pixels);
+    
+    //grayImage.blurGaussian( 9 );
+    //grayImage.threshold(150);
+    
+    fbo.begin();
+    grabber.getTexture().drawSubsection(index, 0, slice, fboSize, offset, 0, 1, grabber.getHeight());
+    fbo.end();
+}
+
+//--------------------------------------------------------------
+void traber::updateFrequency() {
+    int tone = calculateTone();
+    synth.setFrequency(0, 220 * pow(2,(synthTones.at(tone)/12.f)));
+};
+
+
+//--------------------------------------------------------------
+int traber::calculateTone() {
+    // float limit = grayImage.getPixels().getColor(index, 0).limit(); // not used right now
+    //cout << limit << " limit \n";
+    
+    // introduced to avoid dependencies
+    auto stepSize{grabberHeight / 6};
+    
+    //        for (int i = 0; i < grabberHeight; i += stepSize) {
+    //
+    //            float accumulatedBrightness = 0;
+    //            for (int in = i; in < i+stepSize; in++) {
+    //                accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
+    //                //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
+    //            }
+    //            float meanBrightness = accumulatedBrightness / stepSize;
+    //
+    //            //cout << meanBrightness << "\n";
+    //
+    //            float amp = ofMap(meanBrightness, 0, limit, 0, 1);
+    //            //cout << amp << " amp \n";
+    //            int synthIndex = i / stepSize;
+    //
+    //            cout << "synth " << synthIndex << " amp " << amp << "\n";
+    //
+    //            synths.at(synthIndex).setOverallAmplitude(amp);
+    //        }
+    
+    float currentMeanBrightness = 0;
+    //float currentAmp = 0;
+    int currentToneIndex = 0;
+    for (int i = 0; i < grabberHeight; i += stepSize) {
+        
+        float accumulatedBrightness = 0;
+        for (int in = i; in < i+stepSize; in++) {
+            accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
+            //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
+        }
+        float meanBrightness = accumulatedBrightness / stepSize;
+        
+        //cout << "index " << i << " accumulatedBrightness " << accumulatedBrightness << " meanBrightness " << meanBrightness << "\n";
+        
+        if (meanBrightness > currentMeanBrightness) {
+            currentMeanBrightness = meanBrightness;
+            //currentAmp = ofMap(meanBrightness, 0, limit, 0, 1);
+            currentToneIndex = i / stepSize;
+        }
+    }
+    return currentToneIndex;
 }
 
 //--------------------------------------------------------------
@@ -219,11 +228,6 @@ void traber::setupAudio() {
     synth.addOscillator(ofDCO::SINE);
     synth.setSampleRate(0, settings.sampleRate);
 }
-
-//--------------------------------------------------------------
-void traber::updateFrequency(int& tone) {
-    synth.setFrequency(0, 220 * pow(2,(synthTones.at(tone)/12.f)));
-};
 
 void traber::keyPressed(int key){
 }
