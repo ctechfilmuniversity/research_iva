@@ -37,5 +37,5 @@ private:
     std::mutex audioMutex{};
     
     void setupAudio();
-
+    void setupSynth();
 };

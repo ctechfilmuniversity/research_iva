@@ -24,47 +24,9 @@ void stimberg::setup() {
         }
     }
     
-    
     setupAudio();
-    
     ofHideCursor();
-    
-    // TODO: This needs to be refactored into dedicated functions / objects. ATM low prio, please file an improvement request.
-    float freq1 = 110;
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq1, 0.0);
-    
-    float freq2 = 220 * pow(2,(3/12.f));
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq2, 0.0);
-    
-    float freq3 = 220 * pow(2,(10/12.f));
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq3, 0.0);
-    
-    float freq4 = 220 * pow(2,(7/12.f));
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq4, 0.0);
-   
-    float freq5 = 55;
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq5, 0.0);
-
-    float freq6 = 220 * pow(2,(19/12.f));
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq6, 0.0);
-
-    float freq7 = 220 * pow(2,(14/12.f));
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq7, 0.0);
-
-    float freq8 = 220 * pow(2,(15/12.f));
-    synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, freq8, 0.0);
-
-    
-    
-    
-    // set initial oscillator amplification
-//    synthAmp1 = 0.5;
-    
-//    synth1.setAmplitude(1, synthAmp1);
-//    synth1.setAmplitude(2, 0);
-//    synth1.setAmplitude(3, synthAmp1);
-    
-
+    setupSynth();
 }
 
 void stimberg::update()
@@ -261,9 +223,24 @@ void stimberg::setupAudio() {
     // - connect the object to the RtAudioCallback function
     // - start the stream and hence have a continious connection to audio in & out
     soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
-    
-//    synth1.setSampleRate(settings.sampleRate);
+}
 
+//--------------------------------------------------------------
+void stimberg::setupSynth() {
+    const std::array<float, 8> frequencies = {
+        110,
+        220 * pow(2.f,(3/12.f)),
+        220 * pow(2.f,(10/12.f)),
+        220 * pow(2.f,(7/12.f)),
+        55,
+        220 * pow(2.f,(19/12.f)),
+        220 * pow(2.f,(14/12.f)),
+        220 * pow(2.f,(15/12.f))
+    };
+    
+    for (auto frequency : frequencies) {
+        synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, frequency, 0.0);
+    }
 }
 
 //--------------------------------------------------------------
