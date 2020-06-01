@@ -31,8 +31,8 @@ void ofSynth2::fillSoundBuffer(ofSoundBuffer& outBuffer) {
     for (auto i = 0; i < outBuffer.getNumFrames(); i++) {
         
         auto sampleFull{0.0};
-        for (ofDCO osc : oscillators) {
-            sampleFull += osc.generate();
+        for (auto &osc : oscillators) {
+            sampleFull += osc.generate(); // why not here osc->generate() ????
         }
         
 //        if (sampleFull >= 1.0 || sampleFull <= -1.0) {
