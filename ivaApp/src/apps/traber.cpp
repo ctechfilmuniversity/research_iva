@@ -71,7 +71,7 @@ void traber::updateFramebuffer() {
     //grayImage.threshold(150);
     
     fbo.begin();
-    grabber.getTexture().drawSubsection(index, 0, slice, fboSize, offset, 0, 1, grabber.getHeight());
+        grabber.getTexture().drawSubsection(index, 0, slice, fboSize, offset, 0, 1, grabber.getHeight());
     fbo.end();
 }
 
@@ -117,7 +117,7 @@ int traber::calculateTone() {
         
         float accumulatedBrightness = 0;
         for (int in = i; in < i+stepSize; in++) {
-            accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
+            accumulatedBrightness += grayImage.getPixels().getColor(grabber.getWidth() * 0.5, in).getBrightness();
             //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
         }
         float meanBrightness = accumulatedBrightness / stepSize;

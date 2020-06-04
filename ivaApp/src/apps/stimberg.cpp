@@ -6,6 +6,7 @@
 //using namespace cv;
 
 void stimberg::setup() {
+    ofSetWindowTitle("Flow example");
     ofSetVerticalSync(true);
 //    ofSetFrameRate(120);
     cam.setup(640, 480);
