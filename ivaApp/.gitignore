@@ -1,0 +1,10 @@
+obj/*
+bin/*.app
+.vscode/*
+*.plist
+*.xcodeproj/*
+*.xcconfig
+*.pbxproj
+*.xcworkspacedata
+
+*.code-workspace
