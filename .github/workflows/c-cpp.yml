@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository:  kylemcdonald/ofxCv
-          path: ofx/addons
+          path: ofx/addons/ofxCv
       - name: Show dirs
         run: ls -la
       - name: Show addon dirs
