@@ -23,7 +23,7 @@ jobs:
           repository:  openframeworks/openFrameworks
           path: ofx
       - name: Show dirs
-        run: ln -s
+        run: ls -la
 #    - name: configure
 #      run: ./configure
 #    - name: make
