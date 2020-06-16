@@ -20,7 +20,7 @@ jobs:
       - name: Checkout openFrameworks
         uses: actions/checkout@v2
         with:
-          repository:  https://github.com/openframeworks/openFrameworks.git
+          repository:  openframeworks/openFrameworks
           path: ofx
       - name: Show dirs
         run: ln -s
