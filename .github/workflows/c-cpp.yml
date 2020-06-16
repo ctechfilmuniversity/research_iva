@@ -13,7 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: iva
+      - name: Checkout openFrameworks
+        uses: actions/checkout@v2
+        with:
+          repository:  https://github.com/openframeworks/openFrameworks.git
+          path: ofx
+      - name: Show dirs
+        run: ln -s
 #    - name: configure
 #      run: ./configure
 #    - name: make
