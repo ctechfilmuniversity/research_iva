@@ -22,8 +22,15 @@ jobs:
         with:
           repository:  openframeworks/openFrameworks
           path: ofx
+      - name: Checkout ofxCv addon
+        uses: actions/checkout@v2
+        with:
+          repository:  kylemcdonald/ofxCv
+          path: ofx/addons
       - name: Show dirs
         run: ls -la
+      - name: Show addon dirs
+        run: ls -la ./ofx/addons/
 #    - name: configure
 #      run: ./configure
 #    - name: make
