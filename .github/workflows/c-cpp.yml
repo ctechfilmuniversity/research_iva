@@ -36,15 +36,17 @@ jobs:
         run: ls -la
       - name: Show addon dirs
         run: ls -la ./ofx/addons/
-      - name: Install ofx dependencies
-        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
+#      - name: Install ofx dependencies
+#        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
       - name: Download ofx libs
         run: bash ./ofx/scripts/linux/download_libs.sh
+
+#      - name: make
+#        run: make -f Makefile.github-action
+#        working-directory: ${{env.working-dir}}
+
 #    - name: configure
 #      run: ./configure
-      - name: make
-        run: make -f Makefile.github-action
-        working-directory: ${{env.working-dir}}
 #    - name: make check
 #      run: make check
 #    - name: make distcheck
