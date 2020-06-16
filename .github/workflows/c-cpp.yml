@@ -36,10 +36,10 @@ jobs:
         run: ls -la
       - name: Show addon dirs
         run: ls -la ./ofx/addons/
-#      - name: Install ofx dependencies
-#        run: bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
-      - name: Download ofx libs
-        run: bash ./ofx/scripts/linux/download_libs.sh
+      - name: Install ofx dependencies
+        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
+#      - name: Download ofx libs
+#        run: bash ./ofx/scripts/linux/download_libs.sh
 #    - name: configure
 #      run: ./configure
       - name: make
