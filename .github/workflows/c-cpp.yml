@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     env:
-      working-dir: ./ivaApp 
+      working-dir: ./iva/ivaApp 
     runs-on: ubuntu-latest
 
     steps:
