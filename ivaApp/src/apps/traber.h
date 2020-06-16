@@ -56,7 +56,7 @@ private:
     void updateGui(float& value);
     
     ofSynth2 synth{};
-    //std::vector<ofSynth> synths;
+    // -5 E3, -2 G3, 0 A3, 3 C4, 5 D4, 7 E4, 10 G4, 12 A4, 15 C5
     std::vector<int> synthTones {-5, -2, 0, 3, 5, 7, 10, 12, 15};
     
     void updateFramebuffer();
