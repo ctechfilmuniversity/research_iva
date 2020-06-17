@@ -42,7 +42,7 @@ jobs:
         run: bash ./ofx/scripts/linux/download_libs.sh
 
       - name: make
-        run: make -f Makefile.github-action
+        run: make -d -f Makefile.github-action
         working-directory: ${{env.working-dir}}
 
 #    - name: configure
