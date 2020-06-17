@@ -22,6 +22,7 @@ jobs:
         with:
           repository:  openframeworks/openFrameworks
           path: ofx
+          submodules: true
       - name: Checkout ofxCv addon
         uses: actions/checkout@v2
         with:
