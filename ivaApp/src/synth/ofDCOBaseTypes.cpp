@@ -17,7 +17,6 @@ ofDCOSine::ofDCOSine()
 float ofDCOSine::generate() {
     
     auto currentSample = amplitude * sin(phase * phaseMod);
-    
     updatePhase();
     
     return currentSample;
