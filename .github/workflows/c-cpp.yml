@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checking out our iva repo into the folder "iva"
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: iva
+      # # Checking out our iva repo into the folder "iva"
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      #   with:
+      #     path: iva
       
       # Checking out openFrameworks with submodules into the folder "ofx"
       - name: Checkout openFrameworks
