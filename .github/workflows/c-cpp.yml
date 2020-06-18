@@ -64,6 +64,10 @@ jobs:
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: bash ./ofx/scripts/linux/download_libs.sh
+
+      # Build openFrameworks
+      - name: make
+        run: bash ./ofx/scripts/linux/compileOF.sh
       
       # Building the project
       - name: make
