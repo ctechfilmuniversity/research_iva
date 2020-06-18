@@ -6,7 +6,7 @@
 //
 
 #include "ofMathConstants.h"
-
+#include <cmath>
 #include "synth/ofDCO.h"
 
 
