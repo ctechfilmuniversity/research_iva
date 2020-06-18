@@ -10,5 +10,5 @@ endif
 # endif
 
 # call the project makefile!
-# include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
-include ../../ofx/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
+include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
+# include ../../ofx/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
