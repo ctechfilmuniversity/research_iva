@@ -32,10 +32,7 @@ jobs:
           submodules: true
 
       - name: Set OF_ROOT
-        run: export OF_ROOT=${{ github.workspace }}/ofx && export OF_SHARED_MAKEFILES_PATH=${{ github.workspace }}/ofx/libs/openFrameworksCompiled/project/makefileCommon
-
-      - name: Echo OF_ROOT
-        run: echo $OF_ROOT
+        run: export OF_ROOT=${{ github.workspace }}/ofx
 
       
       # Addons: Checking out additional addons into the correct openFrameworks directory
@@ -70,7 +67,7 @@ jobs:
       
       # Building the project
       - name: make
-        run: make -d -f Makefile.github-action
+        run: make -f Makefile.github-action
         working-directory: ${{env.working-dir}}
 
 #    - name: configure
