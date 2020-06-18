@@ -66,8 +66,9 @@ jobs:
         run: bash ./ofx/scripts/linux/compileOF.sh
 
       # Building the project
-      - name: make
+      - name: Building IVA
         run: |
+          export OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
           make -f Makefile.github-action
         # working-directory: ${{env.working-dir}}
