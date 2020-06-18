@@ -6,7 +6,7 @@
 //
 
 #include "ofDCOBaseTypes.h"
-#include "ofMathConstants.h"
+
 
 ofDCOSine::ofDCOSine()
 : ofDCO()

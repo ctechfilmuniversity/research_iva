@@ -4,6 +4,8 @@
 #include "ofxGui.h"
 #include "ofxMidi.h"
 #include "ofSynth2.hpp"
+#include <vector>
+#include <cmath>
 
 class dittmann : public ivaApp, public ofxMidiListener
 {

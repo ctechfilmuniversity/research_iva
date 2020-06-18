@@ -5,8 +5,6 @@
 //  Created by abrennec on 31.10.19.
 //
 
-#include "ofMathConstants.h"
-#include <cmath>
 #include "synth/ofDCO.h"
 
 

@@ -10,6 +10,9 @@
 #pragma once
 
 #include <iostream>
+#include "ofMathConstants.h"
+#include <cmath>
+
 
 // Digitally controlled oscillator (DCO)
 

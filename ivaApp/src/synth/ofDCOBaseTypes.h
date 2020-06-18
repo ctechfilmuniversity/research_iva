@@ -11,6 +11,8 @@
 #pragma once
 
 #include <synth/ofDCO.h>
+#include "ofMathConstants.h"
+#include <cmath>
 
 
 class ofDCOSine : public ofDCO {
