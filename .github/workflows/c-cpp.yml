@@ -32,7 +32,7 @@ jobs:
           submodules: true
 
       - name: Set OF_ROOT
-        run: export OF_ROOT=${{ github.workspace }}/ofx
+        run: export OF_ROOT=${{ github.workspace }}/ofx && export OF_SHARED_MAKEFILES_PATH=${{ github.workspace }}/ofx/libs/openFrameworksCompiled/project/makefileCommon
 
       - name: Echo OF_ROOT
         run: echo $OF_ROOT
