@@ -30,10 +30,6 @@ jobs:
           repository:  openframeworks/openFrameworks
           path: ofx
           submodules: true
-
-      - name: Set OF_ROOT
-        run: export OF_ROOT=${{ github.workspace }}/ofx
-
       
       # Addons: Checking out additional addons into the correct openFrameworks directory
       - name: Checkout ofxCv addon
@@ -72,6 +68,7 @@ jobs:
       # Building the project
       - name: make
         run: |
+          export OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
           make -f Makefile.github-action
         # working-directory: ${{env.working-dir}}
