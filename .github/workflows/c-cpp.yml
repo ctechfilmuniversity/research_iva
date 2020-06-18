@@ -69,6 +69,14 @@ jobs:
       
       # Building the project
       - name: make
+        run: make -f Makefile.github-action
+        working-directory: ./ofx/apps/iva/ivaApp
+
+      - name: make clean
+        run: make clean -f Makefile.github-action
+        working-directory: ./ofx/apps/iva/ivaApp
+
+      - name: make
         run: make -d -f Makefile.github-action
         working-directory: ./ofx/apps/iva/ivaApp
 
