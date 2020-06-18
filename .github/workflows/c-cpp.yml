@@ -3,25 +3,25 @@ name: C/C++ CI
 # Triggered every time something is pushed to the master and also when creating a pull request into the master
 on:
   push:
-    # branches: [ master ]
+    branches: [ master ]
   pull_request:
-    # branches: [ master ]
+    branches: [ master ]
 
 jobs:
   build:
     # just making this path as variable accessible
-    # env:
-    #   working-dir: ./iva/ivaApp 
+    env:
+      working-dir: ./iva/ivaApp 
 
     # the build server's operating system
     runs-on: ubuntu-latest
 
     steps:
-      # # Checking out our iva repo into the folder "iva"
-      # - name: Checkout
-      #   uses: actions/checkout@v2
-      #   with:
-      #     path: iva
+      # Checking out our iva repo into the folder "iva"
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: iva
       
       # Checking out openFrameworks with submodules into the folder "ofx"
       - name: Checkout openFrameworks
@@ -30,12 +30,12 @@ jobs:
           repository:  openframeworks/openFrameworks
           path: ofx
           submodules: true
-      
-      # Checking out our iva repo into the folder "iva"
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: ofx/apps/iva
+
+      - name: Set OF_ROOT
+        run: export OF_ROOT=${{ home }}/ofx
+
+      - name: Echo OF_ROOT
+        run: echo $OF_ROOT
       
       # Addons: Checking out additional addons into the correct openFrameworks directory
       - name: Checkout ofxCv addon
@@ -56,8 +56,8 @@ jobs:
       #   run: ls -la ./ofx/addons/
 
       # To update this component is seemingly necessary in order to compile the project
-      - name: Update poco (component of ofx)
-        run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
+      # - name: Update poco (component of ofx)
+      #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
       
       # The OS needs certain dependencies in order to be able to compile the project.
       - name: Install ofx dependencies
@@ -69,16 +69,8 @@ jobs:
       
       # Building the project
       - name: make
-        run: make -f Makefile.github-action
-        working-directory: ./ofx/apps/iva/ivaApp
-
-      - name: make clean
-        run: make clean -f Makefile.github-action
-        working-directory: ./ofx/apps/iva/ivaApp
-
-      - name: make
         run: make -d -f Makefile.github-action
-        working-directory: ./ofx/apps/iva/ivaApp
+        working-directory: ${{env.working-dir}}
 
 #    - name: configure
 #      run: ./configure

@@ -27,3 +27,5 @@ In this repository we will pursue research ideas on
 - [Choreographiccoding](http://www.choreographiccoding.org/#lab-mz-19)
 
 
+## How to contribute
+Please refer to the instructions in our [wiki](https://github.com/ctechfilmuniversity/research_iva/wiki#how-to-contribute-code).
