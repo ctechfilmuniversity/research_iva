@@ -36,6 +36,7 @@ jobs:
 
       - name: Echo OF_ROOT
         run: echo $OF_ROOT
+        
       
       # Addons: Checking out additional addons into the correct openFrameworks directory
       - name: Checkout ofxCv addon
