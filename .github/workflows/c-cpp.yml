@@ -61,13 +61,7 @@ jobs:
           export OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
           make -f Makefile.github-action
-      
-      # Showing files in bin dir
-      - name: Show bin dir
-        run: |
-          cd ./iva/ivaApp/bin
-          ls -la
-      
+
       # Upload executable binaries to GitHub
       - name: Uploading artifacts
         uses: actions/upload-artifact@v2
