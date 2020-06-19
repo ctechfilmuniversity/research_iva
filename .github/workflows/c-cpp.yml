@@ -9,10 +9,6 @@ on:
 
 jobs:
   build:
-    # just making this path as variable accessible
-    env:
-      working-dir: ./iva/ivaApp 
-
     # the build server's operating system
     runs-on: ubuntu-latest
 
@@ -43,13 +39,7 @@ jobs:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
 
-      # The "show ..." steps are there solely for debugging
-      # - name: Show dirs
-      #   run: ls -la
-      # - name: Show addon dirs
-      #   run: ls -la ./ofx/addons/
-
-      # To update this component is seemingly necessary in order to compile the project
+      # Update poco, a component of ofx (seems not necessary right now)
       # - name: Update poco (component of ofx)
       #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
       
@@ -71,11 +61,16 @@ jobs:
           export OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
           make -f Makefile.github-action
-        # working-directory: ${{env.working-dir}}
-
-#    - name: configure
-#      run: ./configure
-#    - name: make check
-#      run: make check
-#    - name: make distcheck
-#      run: make distcheck
+      
+      # Showing files in bin dir
+      - name: Show bin dir
+        run: |
+          cd ./iva/ivaApp/bin
+          ls -la
+      
+      # Upload executable binaries to GitHub
+      - name: Uploading artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Linux Artifacts
+          path: ./iva/ivaApp/bin/

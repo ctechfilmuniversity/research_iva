@@ -1,3 +1,7 @@
+# This Makefile has been adapted to function with the GitHub Build-Pipeline and set the correct paths.
+# Please do not touch, unless you are making changes for the Build-Pipeline. Have a look into the standard "Makefile"
+# in order to change things, when building locally.
+
 # Attempt to load a config.make file.
 # If none is found, project defaults in config.project.make will be used.
 ifneq ($(wildcard config.make),)
@@ -11,4 +15,3 @@ endif
 
 # call the project makefile!
 include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
-# include ../../ofx/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
