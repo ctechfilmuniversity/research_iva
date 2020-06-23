@@ -1,15 +1,15 @@
-name: cppcheck
-on:
-  pull_request:
-    branches: [ master ]
+# name: cppcheck
+# on:
+#   pull_request:
+#     branches: [ master ]
 
-jobs:
-  build:
-    name: cppcheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: cppcheck
-        uses: deep5050/cppcheck-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
+# jobs:
+#   build:
+#     name: cppcheck
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: cppcheck
+#         uses: deep5050/cppcheck-action@master
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN}}
