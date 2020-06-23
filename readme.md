@@ -9,6 +9,7 @@ Prof. Angela Brennecke, Creative Technologies, 03/2020
 Contributors:  Markus Traber, BSc, CTech Master 
 
 ---
+![build](https://github.com/ctechfilmuniversity/research_iva/workflows/build/badge.svg?branch=master)
 
 # Interactive Visual Audio (iva)
 
