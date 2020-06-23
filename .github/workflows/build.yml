@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: build
 
 # Triggered every time something is pushed to the master and also when creating a pull request into the master
 on:
