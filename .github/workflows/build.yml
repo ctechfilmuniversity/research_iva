@@ -117,7 +117,7 @@ jobs:
       - name: Building IVA
         run: |
           cd ./iva/ivaApp
-          xcodebuild -configuration Release -target ivaApp -project "ivaApp.xcodeproj.github-action"
+          xcodebuild -configuration Release -target ivaApp -project "ivaApp.github-action.xcodeproj"
 
       # Upload executable binaries to GitHub
       - name: Uploading artifacts

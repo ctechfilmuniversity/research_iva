@@ -2,9 +2,12 @@ obj/*
 bin/*.app
 .vscode/*
 *.plist
-*.xcodeproj/*
+!*github-action.plist
 *.xcconfig
-*.pbxproj
-*.xcworkspacedata
+!*github-action.xcconfig
+# *.pbxproj
+# *.xcworkspacedata
+*.xcodeproj/*
+!*github-action.xcodeproj/*
 
 *.code-workspace
