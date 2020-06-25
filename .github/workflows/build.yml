@@ -109,8 +109,8 @@ jobs:
       #   run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
 
       # Downloading additional libs for ofx
-      # - name: Download ofx libs
-      #   run: bash ./ofx/scripts/linux/download_libs.sh
+      - name: Download ofx libs
+        run: bash ./ofx/scripts/osx/download_libs.sh
 
 
       # Building the project
