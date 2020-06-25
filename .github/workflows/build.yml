@@ -112,16 +112,12 @@ jobs:
       # - name: Download ofx libs
       #   run: bash ./ofx/scripts/linux/download_libs.sh
 
-      # Build openFrameworks
-      - name: Building openFrameworks
-        run: bash ./ofx/scripts/ci/osx/build.sh
 
       # Building the project
       - name: Building IVA
         run: |
-          export OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
-          make -f Makefile.github-action
+          xcodebuild -configuration Release -target ivaApp -project "ivaApp.xcodeproj.github-action"
 
       # Upload executable binaries to GitHub
       - name: Uploading artifacts
