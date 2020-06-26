@@ -100,14 +100,6 @@ jobs:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
 
-      # Update poco, a component of ofx (seems not necessary right now)
-      # - name: Update poco (component of ofx)
-      #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
-      
-      # The OS needs certain dependencies in order to be able to compile the project.
-      # - name: Install ofx dependencies
-      #   run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
-
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: bash ./ofx/scripts/osx/download_libs.sh
@@ -118,7 +110,7 @@ jobs:
         run: |
           cd ./iva/ivaApp
           xcodebuild -configuration Release -target ivaApp -project "ivaApp.github-action.xcodeproj"
-          chmod -R 777 ./iva/ivaApp/bin/*
+          chmod -R 777 ./bin/*
 
       # Upload executable binaries to GitHub
       - name: Uploading artifacts
@@ -126,3 +118,53 @@ jobs:
         with:
           name: Mac Os Artifacts
           path: ./iva/ivaApp/bin/
+
+# build-windows:
+#     # the build server's operating system
+#     runs-on: windows-latest
+
+#     steps:
+#       # Checking out our iva repo into the folder "iva"
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#         with:
+#           path: iva
+      
+#       # Checking out openFrameworks with submodules into the folder "ofx"
+#       - name: Checkout openFrameworks
+#         uses: actions/checkout@v2
+#         with:
+#           repository:  openframeworks/openFrameworks
+#           path: ofx
+#           submodules: true
+      
+#       # Addons: Checking out additional addons into the correct openFrameworks directory
+#       - name: Checkout ofxCv addon
+#         uses: actions/checkout@v2
+#         with:
+#           repository:  kylemcdonald/ofxCv
+#           path: ofx/addons/ofxCv
+#       - name: Checkout ofxMidi addon
+#         uses: actions/checkout@v2
+#         with:
+#           repository:  danomatika/ofxMidi
+#           path: ofx/addons/ofxMidi
+
+#       # Downloading additional libs for ofx
+#       - name: Download ofx libs
+#         run: bash ./ofx/scripts/osx/download_libs.sh
+
+
+#       # Building the project
+#       - name: Building IVA
+#         run: |
+#           cd ./iva/ivaApp
+#           xcodebuild -configuration Release -target ivaApp -project "ivaApp.github-action.xcodeproj"
+#           chmod -R 777 ./iva/ivaApp/bin/*
+
+#       # Upload executable binaries to GitHub
+#       - name: Uploading artifacts
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: Mac Os Artifacts
+#           path: ./iva/ivaApp/bin/
