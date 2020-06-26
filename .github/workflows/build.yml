@@ -153,7 +153,6 @@ jobs:
       - name: Download ofx libs
         run: |
           ./ofx/scripts/vs/download_libs.sh -p vs2017
-          rm ./ofx/projectGenerator -r -fo
           mkdir -p ./ofx/projectGenerator
           cd ./ofx/projectGenerator
           echo "Downloading projectGenerator from ci server"
