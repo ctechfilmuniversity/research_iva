@@ -163,6 +163,7 @@ jobs:
       - name: Build
         run: |
           ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
+          export OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
           make
 
