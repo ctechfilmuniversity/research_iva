@@ -159,8 +159,14 @@ jobs:
           iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
           unzip projectGenerator-vs.zip
           rm projectGenerator-vs.zip
-          ./projectGenerator.exe --ofPath="../" ../examples/templates/emptyExample
 
+      - name: Build
+        run: |
+          ./ofx/projectGenerator/projectGenerator.exe /ofPath="./ofx" ./iva/ivaApp
+          cd ./iva/ivaApp
+          cmd /r dir /s /b
+          cd ./bin
+          cmd /r dir /s /b
 
       # # Building the project
       # - name: Building IVA
