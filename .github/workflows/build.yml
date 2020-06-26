@@ -152,21 +152,16 @@ jobs:
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: |
-          OF_ROOT=$PWD
-          ${OF_ROOT}/scripts/vs/download_libs.sh -p vs2017 --silent
-
-          cd ~/
-          rm -rf projectGenerator
-          mkdir -p ~/projectGenerator
-          cd ~/projectGenerator
+          ./ofx/scripts/vs/download_libs.sh -p vs2017 --silent
+          rm -rf ./ofx/projectGenerator
+          mkdir -p ./ofx/projectGenerator
+          cd ./ofx/projectGenerator
           echo "Downloading projectGenerator from ci server"
           iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
           unzip projectGenerator-vs.zip 2> /dev/null
           rm projectGenerator-vs.zip
-
-          cd $OF_ROOT
-          PG_OF_PATH=$OF_ROOT ~/projectGenerator/projectGenerator.exe examples/templates/emptyExample
-          PG_OF_PATH=$OF_ROOT ~/projectGenerator/projectGenerator.exe examples/templates/allAddonsExample
+          cd ../..
+          ls -la
           
 
 
