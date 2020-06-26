@@ -159,7 +159,7 @@ jobs:
           iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
           unzip projectGenerator-vs.zip
           rm projectGenerator-vs.zip
-          projectGenerator.exe --ofPath="../" ../examples/templates/emptyExample
+          ./projectGenerator.exe --ofPath="../" ../examples/templates/emptyExample
 
 
       # # Building the project
