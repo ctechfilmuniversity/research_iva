@@ -162,7 +162,7 @@ jobs:
 
       - name: Build
         run: |
-          ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r ./iva/ivaApp
+          ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs2017" ./iva/ivaApp
           cd ./iva/ivaApp
           cmd /r dir /s /b
 
