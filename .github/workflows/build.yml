@@ -151,7 +151,8 @@ jobs:
 
       # Downloading additional libs for ofx
       - name: Download ofx libs
-        run: bash ./ofx/scripts/vs/download_libs.sh -p vs2017 --silent
+        run: |
+          iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
 
 
       # # Building the project
