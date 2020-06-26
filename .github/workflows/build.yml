@@ -160,8 +160,7 @@ jobs:
           unzip projectGenerator-vs.zip
           rm projectGenerator-vs.zip
           cd ../..
-          ls -la
-          
+          ./ofx/projectGenerator/projectGenerator.exe ./ofx/examples/templates/emptyExample
 
 
       # # Building the project
