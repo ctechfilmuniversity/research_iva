@@ -162,10 +162,8 @@ jobs:
 
       - name: Build
         run: |
-          ./ofx/projectGenerator/projectGenerator.exe /ofPath="./ofx" ./iva/ivaApp
+          ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" ./iva/ivaApp
           cd ./iva/ivaApp
-          cmd /r dir /s /b
-          cd ./bin
           cmd /r dir /s /b
 
       # # Building the project
