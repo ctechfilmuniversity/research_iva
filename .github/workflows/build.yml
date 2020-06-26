@@ -118,6 +118,7 @@ jobs:
         run: |
           cd ./iva/ivaApp
           xcodebuild -configuration Release -target ivaApp -project "ivaApp.github-action.xcodeproj"
+          chmod -R 777 ./iva/ivaApp/bin/*
 
       # Upload executable binaries to GitHub
       - name: Uploading artifacts
