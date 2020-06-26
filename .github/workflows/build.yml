@@ -157,7 +157,7 @@ jobs:
           cd ./ofx/projectGenerator
           echo "Downloading projectGenerator from ci server"
           iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
-          unzip projectGenerator-vs.zip 2> /dev/null
+          unzip projectGenerator-vs.zip
           rm projectGenerator-vs.zip
           cd ../..
           ls -la
