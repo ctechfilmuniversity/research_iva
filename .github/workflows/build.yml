@@ -164,7 +164,7 @@ jobs:
         run: |
           ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
           cd ./iva/ivaApp
-          cmd /r dir /s /b
+          make
 
       # # Building the project
       # - name: Building IVA
