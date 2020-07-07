@@ -9,7 +9,7 @@ void stimberg::setup() {
     cam.setup(640, 480);
     
 //    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-    stepSize = 50;
+    stepSize = 10;
     ySteps = cam.getHeight() / stepSize;
     xSteps = cam.getWidth() / stepSize;
     
