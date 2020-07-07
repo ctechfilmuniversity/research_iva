@@ -36,6 +36,8 @@ private:
     ofSoundBuffer lastBuffer{};
     std::mutex audioMutex{};
     
+    ofxCvColorImage colorImg;
+    
     void setupAudio();
     void setupSynth();
 };

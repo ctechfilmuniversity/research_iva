@@ -2,17 +2,14 @@
 
 #include "stimberg.h"
 
-//using namespace ofxCv;
-//using namespace cv;
-
 void stimberg::setup() {
     ofSetWindowTitle("Flow example");
     ofSetVerticalSync(true);
-//    ofSetFrameRate(120);
+//    ofSetFrameRate(60);
     cam.setup(640, 480);
     
 //    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-    stepSize = 10;
+    stepSize = 50;
     ySteps = cam.getHeight() / stepSize;
     xSteps = cam.getWidth() / stepSize;
     
@@ -25,6 +22,9 @@ void stimberg::setup() {
         }
     }
     
+    colorImg.allocate(640, 480);
+    flow.setWindowSize(stepSize);
+    
     setupAudio();
     ofHideCursor();
     setupSynth();
@@ -36,30 +36,16 @@ void stimberg::update()
 
     if(cam.isFrameNew())
     {
-//        cam.mirror(false, true);
-        ofxCvColorImage colorImg;
-        colorImg.allocate(640, 480);
         colorImg.setFromPixels(cam.getPixels());
         colorImg.mirror(false, true);
-//        ofxCvGrayscaleImage grayImg;
-//        grayImg = colorImg;
-//        grayImg.threshold(100);
-        
-        
-        // TODO: add documentation
-        flow.setWindowSize(stepSize);
+
         flow.calcOpticalFlow(colorImg);
         
         int i = 0;
         int iTotal = xSteps * ySteps;
         float distortionStrength = 6;
         
-//        vector<float> newAmp[8];
         float newAmp[8] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        
-//        for(int i = 0; i < oscNums; i++) {
-//            newAmp[i] = 0.0;
-//        }
         
         for(int y = 1; y + 1 < ySteps; y++)
         {
@@ -69,24 +55,16 @@ void stimberg::update()
                 int i = y * xSteps + x;
                 glm::vec2 position(x * stepSize, y * stepSize);
                 ofRectangle area(position - glm::vec2(stepSize, stepSize) / 2, stepSize, stepSize);
-//                glm::vec2 offset = flow.getTotalFlowInRegion(area);
                 ofVec2f offset = flow.getAverageFlowInRegion(area);
                 
-//                flowAmount[i] = offset;
                 
                 if(offset.length() < 3) {
-//                    offset = ofVec2f(0, 0);
                     offset.scale(ofMap(offset.length(), 0, 3, 0.0, 0.1));
                 } else {
-//                    offset.normalize();
                     offset.scale(ofMap(offset.length(), 0, 10, 0.0, 1.0));
                     
                     ofVec2f v1(-1,1);
-//                    ofVec2f v2(0,1);
                     float angle = v1.angle(offset)+180;
-                    
-                    //ofLogNotice(ofToString(angle));
-
                     
                     if (angle < 90) {
                         newAmp[0] += 1.0 / iTotal;
@@ -104,34 +82,17 @@ void stimberg::update()
                 }
                 
                 flowAmount[i] = offset;
-                
-//                mesh.setVertex(i, glm::vec3(position + distortionStrength * offset, 0));
                 i++;
             }
         }
         
-//        ofLogNotice(ofToString(oscAmp));
-        
         for (int i = 0; i < 8; i++) {
             float amp = synth2.getAmplitude(i) * 0.8 + newAmp[i] * 0.2;
-            
-            //cout << "amp: " << amp << " i:" << i << endl;
-//            float amp = ofLerp(synth.getAmplitude(i), newAmp[i], 0.1);
             synth2.setAmplitude(i, amp);
         }
         
-        
-//        synthAmp1 = synthAmp1 * 0.7 + newAmp1 * 0.3;
-//        synthAmp2 = synthAmp2 * 0.7 + newAmp2 * 0.3;
-//        synthAmp3 = synthAmp3 * 0.7 + newAmp3 * 0.3;
-//        synthAmp4 = synthAmp4 * 0.7 + newAmp4 * 0.3;
-        
 
     }
-    
-//    synth1.setAmplitude(1, synthAmp1);
-//    synth1.setAmplitude(3, synthAmp1);
-    
 
 }
 
