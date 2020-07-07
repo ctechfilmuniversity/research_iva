@@ -38,6 +38,7 @@ void stimberg::update()
     {
 //        cam.mirror(false, true);
         ofxCvColorImage colorImg;
+        colorImg.allocate(640, 480);
         colorImg.setFromPixels(cam.getPixels());
         colorImg.mirror(false, true);
 //        ofxCvGrayscaleImage grayImg;
