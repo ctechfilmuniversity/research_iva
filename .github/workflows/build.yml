@@ -165,7 +165,7 @@ jobs:
           ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
           SET OF_ROOT=${{ github.workspace }}/ofx
           cd ./iva/ivaApp
-          ls -la
+          dir
           msbuild ivaApp.proj /t:build /nologo /noautoresponse /maxcpucount /p:Configuration=Release
 
       # Upload executable binaries to GitHub
