@@ -106,8 +106,7 @@ jobs:
 
       - name: Install project generator
         run: |
-          mkdir -p ./ofx/projectGenerator
-          cd ./ofx/projectGenerator
+          cd ./ofx/
           echo "Downloading projectGenerator from ci server"
           wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-osx.zip
           unzip projectGenerator-osx.zip
@@ -115,7 +114,7 @@ jobs:
 
       - name: Create project files for xcode
         run: |
-          ./ofx/projectGenerator/projectGenerator.app -o="./ofx" -r -p"osx" ./iva/ivaApp
+          ./ofx/projectGenerator-osx/projectGenerator.app -o="./ofx" -r -p"osx" ./iva/ivaApp
 
       # Building the project
       - name: Building IVA
