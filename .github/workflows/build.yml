@@ -2,8 +2,8 @@ name: build
 
 # Triggered every time something is pushed to the master and also when creating a pull request into the master
 on:
-  push:
-    branches: [ master ]
+  # push:
+  #   branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -104,12 +104,24 @@ jobs:
       - name: Download ofx libs
         run: bash ./ofx/scripts/osx/download_libs.sh
 
+      - name: Install project generator
+        run: |
+          cd ./ofx/
+          echo "Downloading projectGenerator from ci server"
+          wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-osx.zip
+          unzip projectGenerator-osx.zip
+          rm projectGenerator-osx.zip
+
+      - name: Create project files for xcode
+        run: |
+          ./ofx/projectGenerator-osx/projectGenerator.app/Contents/Resources/app/app/projectGenerator -o"./ofx" -p"osx" ./iva/ivaApp
 
       # Building the project
       - name: Building IVA
         run: |
           cd ./iva/ivaApp
-          xcodebuild -configuration Release -target ivaApp -project "ivaApp.github-action.xcodeproj"
+          ls -la
+          xcodebuild -configuration Release -target ivaApp -project "ivaApp.xcodeproj"
 
       # Upload executable binaries to GitHub
       - name: Uploading artifacts
@@ -117,6 +129,8 @@ jobs:
         with:
           name: Mac Os Artifacts
           path: ./iva/ivaApp/bin/
+
+
 
   # build-windows:
   #   # the build server's operating system
