@@ -8,66 +8,66 @@ on:
     branches: [ master ]
 
 jobs:
-  build-ubuntu:
-    # the build server's operating system
-    runs-on: ubuntu-latest
+  # build-ubuntu:
+  #   # the build server's operating system
+  #   runs-on: ubuntu-latest
 
-    steps:
-      # Checking out our iva repo into the folder "iva"
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: iva
+  #   steps:
+  #     # Checking out our iva repo into the folder "iva"
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         path: iva
       
-      # Checking out openFrameworks with submodules into the folder "ofx"
-      - name: Checkout openFrameworks
-        uses: actions/checkout@v2
-        with:
-          repository:  openframeworks/openFrameworks
-          path: ofx
-          submodules: true
+  #     # Checking out openFrameworks with submodules into the folder "ofx"
+  #     - name: Checkout openFrameworks
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository:  openframeworks/openFrameworks
+  #         path: ofx
+  #         submodules: true
       
-      # Addons: Checking out additional addons into the correct openFrameworks directory
-      - name: Checkout ofxCv addon
-        uses: actions/checkout@v2
-        with:
-          repository:  kylemcdonald/ofxCv
-          path: ofx/addons/ofxCv
-      - name: Checkout ofxMidi addon
-        uses: actions/checkout@v2
-        with:
-          repository:  danomatika/ofxMidi
-          path: ofx/addons/ofxMidi
+  #     # Addons: Checking out additional addons into the correct openFrameworks directory
+  #     - name: Checkout ofxCv addon
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository:  kylemcdonald/ofxCv
+  #         path: ofx/addons/ofxCv
+  #     - name: Checkout ofxMidi addon
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository:  danomatika/ofxMidi
+  #         path: ofx/addons/ofxMidi
 
-      # Update poco, a component of ofx (seems not necessary right now)
-      # - name: Update poco (component of ofx)
-      #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
+  #     # Update poco, a component of ofx (seems not necessary right now)
+  #     # - name: Update poco (component of ofx)
+  #     #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
       
-      # The OS needs certain dependencies in order to be able to compile the project.
-      - name: Install ofx dependencies
-        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
+  #     # The OS needs certain dependencies in order to be able to compile the project.
+  #     - name: Install ofx dependencies
+  #       run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
 
-      # Downloading additional libs for ofx
-      - name: Download ofx libs
-        run: bash ./ofx/scripts/linux/download_libs.sh
+  #     # Downloading additional libs for ofx
+  #     - name: Download ofx libs
+  #       run: bash ./ofx/scripts/linux/download_libs.sh
 
-      # Build openFrameworks
-      - name: Building openFrameworks
-        run: bash ./ofx/scripts/linux/compileOF.sh
+  #     # Build openFrameworks
+  #     - name: Building openFrameworks
+  #       run: bash ./ofx/scripts/linux/compileOF.sh
 
-      # Building the project
-      - name: Building IVA
-        run: |
-          export OF_ROOT=${{ github.workspace }}/ofx
-          cd ./iva/ivaApp
-          make -f Makefile.github-action
+  #     # Building the project
+  #     - name: Building IVA
+  #       run: |
+  #         export OF_ROOT=${{ github.workspace }}/ofx
+  #         cd ./iva/ivaApp
+  #         make -f Makefile.github-action
 
-      # Upload executable binaries to GitHub
-      - name: Uploading artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: Linux Artifacts
-          path: ./iva/ivaApp/bin/
+  #     # Upload executable binaries to GitHub
+  #     - name: Uploading artifacts
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: Linux Artifacts
+  #         path: ./iva/ivaApp/bin/
 
   build-mac:
     # the build server's operating system
@@ -104,12 +104,25 @@ jobs:
       - name: Download ofx libs
         run: bash ./ofx/scripts/osx/download_libs.sh
 
+      - name: Install project generator
+        run: |
+          mkdir -p ./ofx/projectGenerator
+          cd ./ofx/projectGenerator
+          echo "Downloading projectGenerator from ci server"
+          wget http://ci.openframeworks.cc/projectGenerator/projectGenerator-osx.zip
+          unzip projectGenerator-osx.zip
+          rm projectGenerator-osx.zip
+
+      - name: Create project files for xcode
+        run: |
+          ./ofx/projectGenerator/projectGenerator.app -o="./ofx" -r -p"osx" ./iva/ivaApp
 
       # Building the project
       - name: Building IVA
         run: |
           cd ./iva/ivaApp
-          xcodebuild -configuration Release -target ivaApp -project "ivaApp.github-action.xcodeproj"
+          ls -la
+          xcodebuild -configuration Release -target ivaApp -project "ivaApp.xcodeproj"
 
       # Upload executable binaries to GitHub
       - name: Uploading artifacts
@@ -117,6 +130,8 @@ jobs:
         with:
           name: Mac Os Artifacts
           path: ./iva/ivaApp/bin/
+
+
 
   # build-windows:
   #   # the build server's operating system
