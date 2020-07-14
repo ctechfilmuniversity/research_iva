@@ -118,59 +118,59 @@ jobs:
           name: Mac Os Artifacts
           path: ./iva/ivaApp/bin/
 
-  build-windows:
-    # the build server's operating system
-    runs-on: windows-latest
+  # build-windows:
+  #   # the build server's operating system
+  #   runs-on: windows-latest
 
-    steps:
-      # Checking out our iva repo into the folder "iva"
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: iva
+  #   steps:
+  #     # Checking out our iva repo into the folder "iva"
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         path: iva
       
-      # Checking out openFrameworks with submodules into the folder "ofx"
-      - name: Checkout openFrameworks
-        uses: actions/checkout@v2
-        with:
-          repository:  openframeworks/openFrameworks
-          path: ofx
-          submodules: true
+  #     # Checking out openFrameworks with submodules into the folder "ofx"
+  #     - name: Checkout openFrameworks
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository:  openframeworks/openFrameworks
+  #         path: ofx
+  #         submodules: true
       
-      # Addons: Checking out additional addons into the correct openFrameworks directory
-      - name: Checkout ofxCv addon
-        uses: actions/checkout@v2
-        with:
-          repository:  kylemcdonald/ofxCv
-          path: ofx/addons/ofxCv
-      - name: Checkout ofxMidi addon
-        uses: actions/checkout@v2
-        with:
-          repository:  danomatika/ofxMidi
-          path: ofx/addons/ofxMidi
+  #     # Addons: Checking out additional addons into the correct openFrameworks directory
+  #     - name: Checkout ofxCv addon
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository:  kylemcdonald/ofxCv
+  #         path: ofx/addons/ofxCv
+  #     - name: Checkout ofxMidi addon
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository:  danomatika/ofxMidi
+  #         path: ofx/addons/ofxMidi
 
-      # Downloading additional libs for ofx
-      - name: Download ofx libs
-        run: |
-          ./ofx/scripts/vs/download_libs.sh -p vs2017
-          mkdir -p ./ofx/projectGenerator
-          cd ./ofx/projectGenerator
-          echo "Downloading projectGenerator from ci server"
-          iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
-          unzip projectGenerator-vs.zip
-          rm projectGenerator-vs.zip
+  #     # Downloading additional libs for ofx
+  #     - name: Download ofx libs
+  #       run: |
+  #         ./ofx/scripts/vs/download_libs.sh -p vs2017
+  #         mkdir -p ./ofx/projectGenerator
+  #         cd ./ofx/projectGenerator
+  #         echo "Downloading projectGenerator from ci server"
+  #         iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
+  #         unzip projectGenerator-vs.zip
+  #         rm projectGenerator-vs.zip
 
-      - name: Build
-        run: |
-          ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
-          SET OF_ROOT=${{ github.workspace }}/ofx
-          cd ./iva/ivaApp
-          dir
-          MSBuild.exe ivaApp.vcxproj /t:build /nologo /noautoresponse /maxcpucount /p:Configuration=Release
+  #     - name: Build
+  #       run: |
+  #         ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
+  #         SET OF_ROOT=${{ github.workspace }}/ofx
+  #         cd ./iva/ivaApp
+  #         dir
+  #         MSBuild.exe ivaApp.vcxproj /t:build /nologo /noautoresponse /maxcpucount /p:Configuration=Release
 
-      # Upload executable binaries to GitHub
-      - name: Uploading artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: Mac Os Artifacts
-          path: ./iva/ivaApp/bin/
+  #     # Upload executable binaries to GitHub
+  #     - name: Uploading artifacts
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: Mac Os Artifacts
+  #         path: ./iva/ivaApp/bin/
