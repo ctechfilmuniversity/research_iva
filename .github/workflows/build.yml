@@ -114,7 +114,7 @@ jobs:
 
       - name: Create project files for xcode
         run: |
-          ./ofx/projectGenerator-osx/projectGenerator.app/Contents/Resources/app/app/projectGenerator -o="${{ github.workspace }}/ofx" -p"osx" ${{ github.workspace }}/iva/ivaApp
+          ./ofx/projectGenerator-osx/projectGenerator.app/Contents/Resources/app/app/projectGenerator -o"./ofx" -p"osx" ./iva/ivaApp
 
       # Building the project
       - name: Building IVA
