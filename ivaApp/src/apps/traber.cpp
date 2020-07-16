@@ -78,7 +78,8 @@ void traber::updateFramebuffer() {
 //--------------------------------------------------------------
 void traber::updateFrequency() {
     int tone = calculateTone();
-    synth.setFrequency(0, 220 * pow(2,(synthTones.at(tone)/12.f)));
+    //synth.setFrequency(0, 220 * pow(2,(synthTones.at(tone)/12.f)));
+    pitch_ctrl.set(57 + synthTones.at(tone));
 };
 
 
@@ -160,36 +161,36 @@ void traber::debugDraw(){
 
 
 //--------------------------------------------------------------
-void traber::audioOut(ofSoundBuffer &outBuffer) {
-    
-    //synth.updateSoundBuffer(outBuffer);
-    
-//    for (int i=0; i<numOscillators; i++) {
-//        synths.at(i).updateSoundBuffer(outBuffer);
-//    }
-    
-//    for (auto i = 0; i < outBuffer.getNumFrames(); i++) {
-//        auto sampleFull = synths.at(0).getSample(i);
-//
-//        for (int osc=1; osc<numOscillators; osc++) {
-//            sampleFull += synths.at(osc).getSample(i);
-//        }
-//
-//        // write the computed sample to the left and right channels
-//        outBuffer.getSample(i, 0) = sampleFull;
-//        outBuffer.getSample(i, 1) = sampleFull;
-//    }
-    
-    synth.fillSoundBuffer(outBuffer);
-    
-    // THREAD INFO
-    // lock_name is the "var" name of the lock guard, kind of
-    // a variable that is being constructed with a mutex (audioMutex),
-    // locks the mutex at its construction and unlocks the mutex
-    // when it is being destroyed, i.e., at the end of the scope
-    std::unique_lock<std::mutex> lock_name(audioMutex);
-    lastBuffer = outBuffer;
-}
+//void traber::audioOut(ofSoundBuffer &outBuffer) {
+//    
+//    //synth.updateSoundBuffer(outBuffer);
+//    
+////    for (int i=0; i<numOscillators; i++) {
+////        synths.at(i).updateSoundBuffer(outBuffer);
+////    }
+//    
+////    for (auto i = 0; i < outBuffer.getNumFrames(); i++) {
+////        auto sampleFull = synths.at(0).getSample(i);
+////
+////        for (int osc=1; osc<numOscillators; osc++) {
+////            sampleFull += synths.at(osc).getSample(i);
+////        }
+////
+////        // write the computed sample to the left and right channels
+////        outBuffer.getSample(i, 0) = sampleFull;
+////        outBuffer.getSample(i, 1) = sampleFull;
+////    }
+//    
+//    synth.fillSoundBuffer(outBuffer);
+//    
+//    // THREAD INFO
+//    // lock_name is the "var" name of the lock guard, kind of
+//    // a variable that is being constructed with a mutex (audioMutex),
+//    // locks the mutex at its construction and unlocks the mutex
+//    // when it is being destroyed, i.e., at the end of the scope
+//    std::unique_lock<std::mutex> lock_name(audioMutex);
+//    lastBuffer = outBuffer;
+//}
 
 //--------------------------------------------------------------
 void traber::setupAudio() {
@@ -200,19 +201,19 @@ void traber::setupAudio() {
     
     // start the sound stream with a sample rate of 44100 Hz, and a buffer
     // size of 512 samples per audioOut() call
-    ofSoundStreamSettings settings;
-    settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
-    settings.bufferSize = 1024;
-    settings.numBuffers = 4;
-    settings.setOutListener(this);
+//    ofSoundStreamSettings settings;
+//    settings.numOutputChannels = 2;
+//    settings.sampleRate = 44100;
+//    settings.bufferSize = 1024;
+//    settings.numBuffers = 4;
+//    settings.setOutListener(this);
     
     // the following setup function initiates the whole audio connection
     // it invokes the underlying RTAudioSoundStream to
     // - create an RtAudio object
     // - connect the object to the RtAudioCallback function
     // - start the stream and hence have a continious connection to audio in & out
-    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
+//    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
     
     //synth.setSampleRate(settings.sampleRate);
     
@@ -225,8 +226,19 @@ void traber::setupAudio() {
 //
 //        synths.insert(synths.end(),currSynth);
 //    }
-    synth.addOscillator(ofDCO::SINE);
-    synth.setSampleRate(0, settings.sampleRate);
+    
+//    synth.addOscillator(ofDCO::SINE);
+//    synth.setSampleRate(0, settings.sampleRate);
+    
+    pitch_ctrl >> osc.in_pitch();
+    osc.out_sine() * dB(-12.0f) >> engine.audio_out(0); // connect to left output channel
+    osc.out_sine() * dB(-12.0f) >> engine.audio_out(1); // connect to right right channel
+    
+    engine.listDevices();
+    engine.setDeviceID(1);
+    engine.setup( 44100, 512, 3);
+    
+    engine.
 }
 
 void traber::keyPressed(int key){
@@ -278,5 +290,5 @@ void traber::shutdownApp(){
     fbo.clear();
     grayImage.clear();
     audioMutex.unlock();
-    synth.reset();
+//    synth.reset();
 }
