@@ -17,8 +17,6 @@ public:
     void update();
     void draw();
 
-    //void audioOut(ofSoundBuffer &outBuffer);
-
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
@@ -30,17 +28,10 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-
     
 private:
-    ivaApp *currentApp;
-    
-    brennecke brenneckeApp;
-    clausen clausenApp;
-    traber traberApp;
-    stimberg stimbergApp;
-    dittmann dittmannApp;
-    
+    int appIndex = 0;
+    std::vector<ivaApp*> apps;
     
     void switchApp(int key);
 };
