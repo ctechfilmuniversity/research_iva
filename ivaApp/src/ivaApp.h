@@ -9,15 +9,22 @@
 #define ivaApp_h
 
 #include "ofMain.h"
+#include "ofxPDSP.h"
 
-// TODO: The current implementation is a great step into the direction I would like to go. Nonetheless, I do not want to continue using several apps but rather one app with several visualizations. This will be the next big task for IVAapp from my point of view. Let's put it on the agenda of our next meeting.
-
+//
 class ivaApp : public ofBaseApp {
     
 public:
     virtual void shutdownApp() = 0;
 
+protected:
+    ivaApp(pdsp::Engine & engine) : engine(engine){}
+    pdsp::Engine & engine;
+//    static pdsp::Engine engineStatic;
+    
 private:
+//    ivaApp();
+    
 };
 
 #endif /* ivaApp_h */

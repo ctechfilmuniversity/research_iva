@@ -14,6 +14,8 @@
 class traber : public ivaApp {
 public:
     
+    traber(pdsp::Engine & engine) : ivaApp(engine){};
+    
     void setup();
     void update();
     void draw();
@@ -32,14 +34,13 @@ public:
     
     void shutdownApp();
 
-    pdsp::Engine            engine;
+    //pdsp::Engine            engine;
     pdsp::VAOscillator      osc;
     pdsp::ValueControl      pitch_ctrl;
     
     
     //----------------------------------------------------------
 private:
-    
     int fboSize, index;
     int grabberHeight{240};
     int grabberWidth{320};

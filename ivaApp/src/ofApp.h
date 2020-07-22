@@ -35,12 +35,13 @@ public:
 private:
     ivaApp *currentApp;
     
-    brennecke brenneckeApp;
-    clausen clausenApp;
-    traber traberApp;
-    stimberg stimbergApp;
-    dittmann dittmannApp;
+//    brennecke brenneckeApp;
+//    clausen clausenApp;
+    traber traberApp{engine};
+//    traber traberApp;
+//    stimberg stimbergApp;
+//    dittmann dittmannApp;
     
-    
+    pdsp::Engine            engine;
     void switchApp(int key);
 };

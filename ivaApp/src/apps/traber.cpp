@@ -31,13 +31,12 @@ void traber::setup(){
     setupAudio();
 }
 
-// TODO: This function is too large, break it down into readable packages.
 //--------------------------------------------------------------
 void traber::update(){
     // "lastBuffer" is shared between update() and audioOut(), which are called
     // on two different threads. This lock makes sure we don't use lastBuffer
     // from both threads simultaneously (see the corresponding lock in audioOut())
-    std::unique_lock<std::mutex> lock_name(audioMutex);
+//    std::unique_lock<std::mutex> lock_name(audioMutex);
     
     // Grab the camera feed
     // and check for new frames
@@ -238,7 +237,6 @@ void traber::setupAudio() {
     engine.setDeviceID(1);
     engine.setup( 44100, 512, 3);
     
-    engine.
 }
 
 void traber::keyPressed(int key){

@@ -6,8 +6,9 @@
 void ofApp::setup(){
     // TODO: Technically very well done, conceptually, I would like to change the approach of having several apps. To be discussed.
 
-    currentApp = &brenneckeApp;
+//    currentApp = &brenneckeApp;
     //theFirstApp.setup();
+    currentApp = &traberApp;
     currentApp->setup();
 }
 
@@ -98,25 +99,25 @@ void ofApp::switchApp(int key){
     cout << "## switchApp called" << endl;
     cout << "## switchApp shutting down current app" << endl;
     currentApp->shutdownApp();
-    switch (key) {
-        case '1':
-        default:
-            currentApp = &brenneckeApp;
-            break;
-        case '2':
-            currentApp = &clausenApp;
-            break;
-        case '3':
-            currentApp = &traberApp;
-            break;
-        case '4':
-            currentApp = &stimbergApp;
-            break;
-        case '5':
-            currentApp = &dittmannApp;
-            break;
-            
-    }
+//    switch (key) {
+//        case '1':
+//        default:
+//            currentApp = &brenneckeApp;
+//            break;
+//        case '2':
+//            currentApp = &clausenApp;
+//            break;
+//        case '3':
+//            currentApp = &traberApp;
+//            break;
+//        case '4':
+//            currentApp = &stimbergApp;
+//            break;
+//        case '5':
+//            currentApp = &dittmannApp;
+//            break;
+//
+//    }
     
     // Reset Window Shape to original shape
     ofSetWindowShape(512, 384);
