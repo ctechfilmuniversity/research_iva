@@ -96,6 +96,9 @@ void ofApp::switchApp(int key){
     // Reset Window Shape to original shape
     ofSetWindowShape(512, 384);
     
+    // set window title after typeid name
+    ofSetWindowTitle(typeid(*apps[appIndex]).name());
+    
     cout << "## Calling setup function of new app" << endl;
     apps[appIndex]->setup();
 }

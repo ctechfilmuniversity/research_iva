@@ -1,14 +1,15 @@
-    // Source:
-    // https://github.com/wearenocomputer/workshop
-
+// Based on slitscan example from: https://github.com/wearenocomputer/workshop
 
 #include "traber.h"
 
 //--------------------------------------------------------------
 void traber::setup(){
     
-    ofSetWindowTitle("Slitscan example");
+    //ofSetWindowTitle("Slitscan example");
     ofBackground(33);
+    
+    ofSetWindowShape(512, 384);
+    
     
     // Init grabber
     grabberWidth = 640;
@@ -21,13 +22,12 @@ void traber::setup(){
     // Otherwise openFrameworks will scale
     // our FBO, which results in incorrect
     // mapping of texture coordinates
-    fboSize = 512;
+    fboSize = ofGetWidth();
     index = 0;
     
     fbo.allocate(fboSize, fboSize);
-    
+    fboTonesPlayed.allocate(fboSize, fboSize);
     grayImage.allocate(grabberWidth, grabberHeight);
-    
     setupAudio();
 }
 
@@ -47,6 +47,7 @@ void traber::update(){
         // And draw a slice of the
         // new frame to the FBO
         updateFramebuffer();
+        updateFramebufferTonesPlayed();
         updateFrequency();
         
         // Increase index or
@@ -67,12 +68,30 @@ void traber::updateFramebuffer() {
     pixels.setImageType(OF_IMAGE_GRAYSCALE);
     grayImage.setFromPixels(pixels);
     
+    
     //grayImage.blurGaussian( 9 );
     //grayImage.threshold(150);
     
     fbo.begin();
         grabber.getTexture().drawSubsection(index, 0, slice, fboSize, offset, 0, 1, grabber.getHeight());
     fbo.end();
+}
+
+void traber::updateFramebufferTonesPlayed() {
+    fboTonesPlayed.begin();
+        ofPolyline line{};
+        line.addVertex(index, fboSize / synthTones.size() * calculateTone());
+        line.addVertex(index, fboSize / synthTones.size() * (calculateTone() + 1));
+    
+        // Problems with alpha when switching between ui on and off
+        //ofColor greenAlpha(13, 255, 100, 100);
+        //ofSetColor(greenAlpha);
+        //ofSetLineWidth(1);
+        ofSetColor(ofColor::lightSeaGreen);
+        line.draw();
+        //ofSetLineWidth(1);
+        ofSetColor(ofColor::white);
+    fboTonesPlayed.end();
 }
 
 //--------------------------------------------------------------
@@ -90,28 +109,8 @@ int traber::calculateTone() {
     // introduced to avoid dependencies
     auto stepSize{grabberHeight / 6};
     
-    //        for (int i = 0; i < grabberHeight; i += stepSize) {
-    //
-    //            float accumulatedBrightness = 0;
-    //            for (int in = i; in < i+stepSize; in++) {
-    //                accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
-    //                //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
-    //            }
-    //            float meanBrightness = accumulatedBrightness / stepSize;
-    //
-    //            //cout << meanBrightness << "\n";
-    //
-    //            float amp = ofMap(meanBrightness, 0, limit, 0, 1);
-    //            //cout << amp << " amp \n";
-    //            int synthIndex = i / stepSize;
-    //
-    //            cout << "synth " << synthIndex << " amp " << amp << "\n";
-    //
-    //            synths.at(synthIndex).setOverallAmplitude(amp);
-    //        }
-    
+    // TODO: use brightness to adjust amplitude?
     float currentMeanBrightness = 0;
-    //float currentAmp = 0;
     int currentToneIndex = 0;
     for (int i = 0; i < grabberHeight; i += stepSize) {
         
@@ -135,14 +134,57 @@ int traber::calculateTone() {
 
 //--------------------------------------------------------------
 void traber::draw(){
-//    debugDraw();
-//    ofPushMatrix();
-//    ofTranslate(360, 50);
-//    fbo.draw(0,0);
-    fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
-//    fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
+    // debugDraw();
 
-//    ofPopMatrix();
+    fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
+    
+    if (drawUI) {
+        fboTonesPlayed.draw(0, 0, ofGetWidth(), ofGetHeight());
+        drawToneLines();
+        drawPositionLine();
+        drawPositionLineCurrentTone();
+    }
+}
+
+void traber::drawToneLines() {
+    ofColor whiteAlphaLine(255, 255, 255, 1);
+    ofSetColor(whiteAlphaLine);
+    ofSetLineWidth(1);
+    
+    for (int i=1; i < synthTones.size(); i++) {
+        float x1 = i % 2 != 0 ? -1 : ofGetWidth() + 1;
+        float x2 = i % 2 != 0 ? ofGetWidth() + 1 : -1;
+        float y = ofGetHeight() / synthTones.size() * i;
+        toneLines.addVertex(x1, y);
+        toneLines.addVertex(x2, y);
+        
+        if (i == synthTones.size() - 1 && i % 2 != 0) {
+            toneLines.addVertex( ofGetWidth() + 1, ofGetHeight() + 1);
+            toneLines.addVertex( -1,               ofGetHeight() + 1);
+        }
+    }
+
+    toneLines.draw();
+    
+    ofSetColor(ofColor::white);
+}
+
+void traber::drawPositionLine() {
+    ofPolyline line{};
+    line.addVertex(index, 0);
+    line.addVertex(index, ofGetHeight());
+    ofSetColor(ofColor::red);
+    line.draw();
+    ofSetColor(ofColor::white);
+}
+
+void traber::drawPositionLineCurrentTone() {
+    ofPolyline line{};
+    line.addVertex(index, ofGetHeight() / synthTones.size() * calculateTone());
+    line.addVertex(index, ofGetHeight() / synthTones.size() * (calculateTone() + 1));
+    ofSetColor(ofColor::green);
+    line.draw();
+    ofSetColor(ofColor::white);
 }
 
 //--------------------------------------------------------------
@@ -161,25 +203,6 @@ void traber::debugDraw(){
 
 //--------------------------------------------------------------
 void traber::audioOut(ofSoundBuffer &outBuffer) {
-    
-    //synth.updateSoundBuffer(outBuffer);
-    
-//    for (int i=0; i<numOscillators; i++) {
-//        synths.at(i).updateSoundBuffer(outBuffer);
-//    }
-    
-//    for (auto i = 0; i < outBuffer.getNumFrames(); i++) {
-//        auto sampleFull = synths.at(0).getSample(i);
-//
-//        for (int osc=1; osc<numOscillators; osc++) {
-//            sampleFull += synths.at(osc).getSample(i);
-//        }
-//
-//        // write the computed sample to the left and right channels
-//        outBuffer.getSample(i, 0) = sampleFull;
-//        outBuffer.getSample(i, 1) = sampleFull;
-//    }
-    
     synth.fillSoundBuffer(outBuffer);
     
     // THREAD INFO
@@ -193,17 +216,12 @@ void traber::audioOut(ofSoundBuffer &outBuffer) {
 
 //--------------------------------------------------------------
 void traber::setupAudio() {
-    // TODO: The dropouts are likely to be caused by the buffer size being too small. Try again with 1024.
-    // I guess that the dropout is caused by the buffer not being filled fast enough. When playback / audio out reads from the buffer, there are empty spots, i.e., sample values jump from 0.75 (or whatever) to 0.0. This causes the dropout. It might as well be an amplitude value > 1.0/-1.0 but since this does not happen and would potentially sound slightly different, the reason might be a small buffer size. To investigate this further, please try to identify a recreation scenario and file that one as a bug report. Also, increase the buffer size and see whether this fixes the issue. Latency might be a negative sideeffect .. ; -) But let's see.
-    
-    // MT: Increased buffer size as suggested by Angela solved the problem for this app
-    
     // start the sound stream with a sample rate of 44100 Hz, and a buffer
     // size of 512 samples per audioOut() call
     ofSoundStreamSettings settings;
     settings.numOutputChannels = 2;
     settings.sampleRate = 44100;
-    settings.bufferSize = 1024;
+    settings.bufferSize = 1024; // increased buffer size seems necessary here
     settings.numBuffers = 4;
     settings.setOutListener(this);
     
@@ -214,17 +232,6 @@ void traber::setupAudio() {
     // - start the stream and hence have a continious connection to audio in & out
     soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
     
-    //synth.setSampleRate(settings.sampleRate);
-    
-    
-    // abrennec: Potential risk in a loop: numOscillators is 6, synthTones.size is >6
-//    for (int i=0; i<numOscillators; i++) {
-//        ofSynth currSynth = ofSynth();
-//        currSynth.setSampleRate(settings.sampleRate);
-//        currSynth.setFrequency(220 * pow(2,(synthTones.at(i)/12.f)));
-//
-//        synths.insert(synths.end(),currSynth);
-//    }
     synth.addOscillator(ofDCO::SINE);
     synth.setSampleRate(0, settings.sampleRate);
 }
@@ -234,6 +241,9 @@ void traber::keyPressed(int key){
 
 //--------------------------------------------------------------
 void traber::keyReleased(int key){
+    if (key == 32) { // space key
+        drawUI = !drawUI;
+    }
 }
 
 //--------------------------------------------------------------
