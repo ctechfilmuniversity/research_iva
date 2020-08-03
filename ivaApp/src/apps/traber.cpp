@@ -24,9 +24,10 @@ void traber::setup(){
     // mapping of texture coordinates
     fboSize = ofGetWidth();
     index = 0;
-    
-    fbo.allocate(fboSize, fboSize);
-    fboTonesPlayed.allocate(fboSize, fboSize);
+    currentToneIndex = 0;
+        
+    fbo.allocate(fboSize, fboSize, GL_RGBA);
+    fboTonesPlayed.allocate(fboSize, fboSize, GL_RGBA);
     grayImage.allocate(grabberWidth, grabberHeight);
     setupAudio();
 }
@@ -44,11 +45,12 @@ void traber::update(){
     grabber.update();
     if(grabber.isFrameNew()){
         
+        updateFrequency();
+        
         // And draw a slice of the
         // new frame to the FBO
         updateFramebuffer();
         updateFramebufferTonesPlayed();
-        updateFrequency();
         
         // Increase index or
         // x-offset position
@@ -79,30 +81,32 @@ void traber::updateFramebuffer() {
 
 void traber::updateFramebufferTonesPlayed() {
     fboTonesPlayed.begin();
+        if (index == 0) {
+            ofClear(255,255,255, 0); // Clear canvas when starting from 0
+        }
+    
         ofPolyline line{};
-        line.addVertex(index, fboSize / synthTones.size() * calculateTone());
-        line.addVertex(index, fboSize / synthTones.size() * (calculateTone() + 1));
+        line.addVertex(index, fboSize / synthTones.size() * currentToneIndex);
+        line.addVertex(index, fboSize / synthTones.size() * (currentToneIndex + 1));
     
         // Problems with alpha when switching between ui on and off
         //ofColor greenAlpha(13, 255, 100, 100);
         //ofSetColor(greenAlpha);
-        //ofSetLineWidth(1);
         ofSetColor(ofColor::lightSeaGreen);
         line.draw();
-        //ofSetLineWidth(1);
         ofSetColor(ofColor::white);
     fboTonesPlayed.end();
 }
 
 //--------------------------------------------------------------
 void traber::updateFrequency() {
-    int tone = calculateTone();
-    synth.setFrequency(0, 220 * pow(2,(synthTones.at(tone)/12.f)));
+    calculateToneIndex();
+    synth.setFrequency(0, 220 * pow(2,(synthTones.at(currentToneIndex)/12.f)));
 };
 
 
 //--------------------------------------------------------------
-int traber::calculateTone() {
+void traber::calculateToneIndex() {
     // float limit = grayImage.getPixels().getColor(index, 0).limit(); // not used right now
     //cout << limit << " limit \n";
     
@@ -129,7 +133,7 @@ int traber::calculateTone() {
             currentToneIndex = i / stepSize;
         }
     }
-    return currentToneIndex;
+    this->currentToneIndex = currentToneIndex;
 }
 
 //--------------------------------------------------------------
@@ -142,12 +146,14 @@ void traber::draw(){
         fboTonesPlayed.draw(0, 0, ofGetWidth(), ofGetHeight());
         drawToneLines();
         drawPositionLine();
+        drawToneNames();
         drawPositionLineCurrentTone();
+    } else {
+        ofDrawBitmapString("Press space to toggle UI", 10, 20);
     }
 }
 
 void traber::drawToneLines() {
-    ofColor whiteAlphaLine(255, 255, 255, 1);
     ofSetColor(whiteAlphaLine);
     ofSetLineWidth(1);
     
@@ -178,10 +184,17 @@ void traber::drawPositionLine() {
     ofSetColor(ofColor::white);
 }
 
+void traber::drawToneNames() {
+    for (int i=0; i < toneNames.size(); i++) {
+        int y = ofGetHeight() / toneNames.size() * i + ofGetHeight() / toneNames.size() / 2;
+        ofDrawBitmapString(toneNames[i], index + 10, y);
+    }
+}
+
 void traber::drawPositionLineCurrentTone() {
     ofPolyline line{};
-    line.addVertex(index, ofGetHeight() / synthTones.size() * calculateTone());
-    line.addVertex(index, ofGetHeight() / synthTones.size() * (calculateTone() + 1));
+    line.addVertex(index, ofGetHeight() / synthTones.size() * currentToneIndex);
+    line.addVertex(index, ofGetHeight() / synthTones.size() * (currentToneIndex + 1));
     ofSetColor(ofColor::green);
     line.draw();
     ofSetColor(ofColor::white);
