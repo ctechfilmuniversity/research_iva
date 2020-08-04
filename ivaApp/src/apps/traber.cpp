@@ -4,12 +4,8 @@
 
 //--------------------------------------------------------------
 void traber::setup(){
-    
-    //ofSetWindowTitle("Slitscan example");
     ofBackground(33);
-    
     ofSetWindowShape(512, 384);
-    
     
     // Init grabber
     grabberWidth = 640;
@@ -28,7 +24,7 @@ void traber::setup(){
         
     fbo.allocate(fboSize, fboSize, GL_RGBA);
     fboTonesPlayed.allocate(fboSize, fboSize, GL_RGBA);
-    grayImage.allocate(grabberWidth, grabberHeight);
+    grayImage.allocate(ofGetWidth(), ofGetHeight());
     setupAudio();
 }
 
@@ -40,21 +36,46 @@ void traber::update(){
     // from both threads simultaneously (see the corresponding lock in audioOut())
     std::unique_lock<std::mutex> lock_name(audioMutex);
     
+    if (!running) {
+        return;
+    }
+    
     // Grab the camera feed
     // and check for new frames
     grabber.update();
     if(grabber.isFrameNew()){
         
-        updateFrequency();
+        // this part is inside the grabber.isFrameNew() if-clause, since the speed for a recording would be different outside.
+        if (recorded && recordMode) {
+            updateToneAndIndex();
+            return;
+        }
+        
+        if (recordMode && index == fboSize) {
+            recorded = true;
+        }
+        
+        updateToneAndIndex();
         
         // And draw a slice of the
         // new frame to the FBO
         updateFramebuffer();
         updateFramebufferTonesPlayed();
-        
-        // Increase index or
-        // x-offset position
-        index < fboSize ? index++ : index=0;
+    }
+}
+
+void traber::updateToneAndIndex() {
+    calculateToneIndex();
+    synth.setFrequency(0, 220 * pow(2,(synthTones.at(currentToneIndex)/12.f)));
+    
+    //index < fboSize ? index++ : index=0;
+    if (index < fboSize) {
+        index++;
+    } else {
+        index = 0;
+        if (recordMode) {
+            recorded = true;
+        }
     }
 }
 
@@ -62,14 +83,6 @@ void traber::update(){
 void traber::updateFramebuffer() {
     float slice = grabber.getWidth() / float(fboSize);
     float offset = grabber.getWidth() * 0.5;
-    
-    
-    ofPixels pixels;
-    
-    grabber.getTexture().readToPixels(pixels);
-    pixels.setImageType(OF_IMAGE_GRAYSCALE);
-    grayImage.setFromPixels(pixels);
-    
     
     //grayImage.blurGaussian( 9 );
     //grayImage.threshold(150);
@@ -81,7 +94,7 @@ void traber::updateFramebuffer() {
 
 void traber::updateFramebufferTonesPlayed() {
     fboTonesPlayed.begin();
-        if (index == 0) {
+        if (index == 0 && !recordMode) {
             ofClear(255,255,255, 0); // Clear canvas when starting from 0
         }
     
@@ -99,29 +112,24 @@ void traber::updateFramebufferTonesPlayed() {
 }
 
 //--------------------------------------------------------------
-void traber::updateFrequency() {
-    calculateToneIndex();
-    synth.setFrequency(0, 220 * pow(2,(synthTones.at(currentToneIndex)/12.f)));
-};
-
-
-//--------------------------------------------------------------
 void traber::calculateToneIndex() {
-    // float limit = grayImage.getPixels().getColor(index, 0).limit(); // not used right now
-    //cout << limit << " limit \n";
-    
-    // introduced to avoid dependencies
     auto stepSize{grabberHeight / 6};
     
     // TODO: use brightness to adjust amplitude?
+    
+    // now using the fbo instead of webcam image in order to enable recording function
+    ofPixels pixels;
+    fbo.getTexture().readToPixels(pixels);
+    pixels.setImageType(OF_IMAGE_GRAYSCALE);
+    grayImage.setFromPixels(pixels);
+    
     float currentMeanBrightness = 0;
     int currentToneIndex = 0;
-    for (int i = 0; i < grabberHeight; i += stepSize) {
+    for (int i = 0; i < ofGetHeight(); i += stepSize) {
         
         float accumulatedBrightness = 0;
         for (int in = i; in < i+stepSize; in++) {
-            accumulatedBrightness += grayImage.getPixels().getColor(grabber.getWidth() * 0.5, in).getBrightness();
-            //cout << "brightness: " << grayImage.getPixels().getColor(index, in).getBrightness() << "\n";
+            accumulatedBrightness += grayImage.getPixels().getColor(index, in).getBrightness();
         }
         float meanBrightness = accumulatedBrightness / stepSize;
         
@@ -148,6 +156,7 @@ void traber::draw(){
         drawPositionLine();
         drawToneNames();
         drawPositionLineCurrentTone();
+        drawTextInfo();
     } else {
         ofDrawBitmapString("Press space to toggle UI", 10, 20);
     }
@@ -198,6 +207,19 @@ void traber::drawPositionLineCurrentTone() {
     ofSetColor(ofColor::green);
     line.draw();
     ofSetColor(ofColor::white);
+}
+
+void traber::drawTextInfo() {
+    string runningText = "Running:      ";
+    runningText.append(running ? "yes" : "no ");
+    runningText.append("   Press 's' to toggle.");
+    
+    string recordModeText = "Record mode:  ";
+    recordModeText.append(recordMode ? "yes" : "no ");
+    recordModeText.append("   Press 'r' to toggle.");
+    
+    ofDrawBitmapString(runningText, 10, 20);
+    ofDrawBitmapString(recordModeText, 10, 35);
 }
 
 //--------------------------------------------------------------
@@ -256,7 +278,41 @@ void traber::keyPressed(int key){
 void traber::keyReleased(int key){
     if (key == 32) { // space key
         drawUI = !drawUI;
+    } else if (key == 'r') {
+        changeRecordMode(!recordMode);
+    } else if (key == 's') {
+        changeRunning(!running);
     }
+}
+
+void traber::changeRecordMode(const bool mode) {
+    recordMode = mode;
+    recorded = false;
+    resetToStart();
+    if (recordMode) {
+        changeRunning(false);
+    }
+}
+
+void traber::changeRunning(const bool run) {
+    running = run;
+    if (running) {
+        //synth.setAmplitude(0, ofSynth2::AMPLITUDE);
+        synth.setAmplitude(0, 0.5);
+    } else {
+        synth.setAmplitude(0, 0);
+    }
+}
+
+void traber::resetToStart() {
+    fboTonesPlayed.begin();
+        ofClear(255,255,255, 0); // Clear canvas when starting from 0
+    fboTonesPlayed.end();
+    fbo.begin();
+        ofClear(255,255,255, 0); // Clear canvas when starting from 0
+    fbo.end();
+    index = 0;
+    currentToneIndex = 0;
 }
 
 //--------------------------------------------------------------
