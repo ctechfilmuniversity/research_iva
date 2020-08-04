@@ -34,6 +34,9 @@ public:
     //----------------------------------------------------------
 private:
     bool drawUI = false;
+    bool recordMode = false;
+    bool recorded = false;
+    bool running = true;
     int fboSize, index, currentToneIndex;
     int grabberHeight{240};
     int grabberWidth{320};
@@ -52,6 +55,7 @@ private:
     void drawPositionLine();
     void drawToneNames();
     void drawPositionLineCurrentTone();
+    void drawTextInfo();
 
 
     void setupAudio();
@@ -70,10 +74,15 @@ private:
     std::vector<int> synthTones {-5, -2, 0, 3, 5, 7};
     std::vector<string> toneNames {"E3", "G3", "A3", "C4", "D4", "E4"};
     
+    void updateToneAndIndex();
     void updateFramebuffer();
     void updateFramebufferTonesPlayed();
-    void updateFrequency();
     void calculateToneIndex();
+    
+    void changeRecordMode(const bool mode);
+    void changeRunning(const bool run);
+    
+    void resetToStart();
         
     // more info on using mutex and locks at
     // https://medium.com/swlh/c-mutex-write-your-first-concurrent-code-69ac8b332288
