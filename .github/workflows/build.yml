@@ -64,6 +64,7 @@ jobs:
           echo "Downloading projectGenerator from ci server"
           wget http://ci.openframeworks.cc/projectGenerator/projectGenerator_linux
           chmod +x projectGenerator_linux
+          sudo apt install libglew-dev
 
       - name: Create new makefiles with project generator
         run: |
