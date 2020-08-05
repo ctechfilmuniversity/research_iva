@@ -45,7 +45,7 @@ jobs:
       
       # The OS needs certain dependencies in order to be able to compile the project.
       - name: Install ofx dependencies
-        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
+        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh -y
 
       # Downloading additional libs for ofx
       - name: Download ofx libs
