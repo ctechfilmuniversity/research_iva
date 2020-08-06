@@ -187,10 +187,14 @@ jobs:
           unzip projectGenerator-vs.zip
           rm projectGenerator-vs.zip
 
+      # - name: Add msbuild to PATH
+      #   uses: microsoft/setup-msbuild@v1.0.1
+      #     with:
+      #       vs-version: '[15.0,15.9)'
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.1
           with:
-            vs-version: '[15.0,15.9)'
+            vs-version: '[16.4,16.5)'
 
       - name: Build
         run: |
