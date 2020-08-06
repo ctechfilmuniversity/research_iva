@@ -189,6 +189,7 @@ jobs:
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.1
+          vs-version: '[15.0,15.9)'
 
       - name: Build
         run: |
