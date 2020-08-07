@@ -167,8 +167,7 @@ jobs:
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: |
-          SET OF_ROOT=${{ github.workspace }}/ofx
-          bash ${OF_ROOT}/scripts/vs/download_libs.sh -p vs2017
+          bash ./ofx/scripts/vs/download_libs.sh -p vs2017
 
       # Addons: Checking out additional addons into the correct openFrameworks directory
       - name: Checkout ofxCv addon
