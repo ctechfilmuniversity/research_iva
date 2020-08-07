@@ -167,7 +167,7 @@ jobs:
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: |
-          bash ./ofx/scripts/vs/download_libs.sh -p vs2017
+          ./ofx/scripts/vs/download_libs.sh -p vs2017 | bash
 
       # Addons: Checking out additional addons into the correct openFrameworks directory
       - name: Checkout ofxCv addon
