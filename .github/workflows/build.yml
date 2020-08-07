@@ -165,12 +165,15 @@ jobs:
           submodules: true
       
       # Downloading additional libs for ofx
-      # - name: Download ofx libs
+      # - name: Download and install ofx libs
       #   run: |
       #     ./ofx/scripts/vs/download_libs.ps1 -platform vs2017
-      - name: Display the path
-        run: ./ofx/scripts/vs/download_libs.ps1 -platform vs2017
-        shell: pwsh
+
+      - name: Download and install ofx libs
+        shell: cmd
+        run: |
+          echo on
+          powershell -File ./ofx/scripts/vs/download_libs.ps1 -platform vs2017
 
       # Addons: Checking out additional addons into the correct openFrameworks directory
       - name: Checkout ofxCv addon
