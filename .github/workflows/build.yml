@@ -147,7 +147,7 @@ jobs:
 
   build-windows:
     # the build server's operating system
-    runs-on: windows-latest
+    runs-on: windows-2016
 
     steps:
       # Checking out our iva repo into the folder "iva"
