@@ -64,8 +64,6 @@ private:
     bool                bLearnBakground;
     
     int mode = FREQ_AREA_MODE;
-    //int mode = FREQ_HEIGHT_MODE;
-    //int mode = TONE_MODE;
     int numSynths = 10;
     int maxAreaSize;
     
