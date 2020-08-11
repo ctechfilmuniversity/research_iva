@@ -14,6 +14,12 @@
 #include "ofSynth2.hpp"
 #include "ivaApp.h"
 
+enum objectContoursMode {
+    TONE_MODE = 0,
+    FREQ_HEIGHT_MODE = 1,
+    FREQ_AREA_MODE = 2,
+};
+
 class objectContours : public ivaApp {
 public:
     
@@ -57,6 +63,12 @@ private:
     int                 threshold;
     bool                bLearnBakground;
     
+    //int mode = FREQ_AREA_MODE;
+    int mode = FREQ_HEIGHT_MODE;
+    int numSynths = 10;
+    int maxAreaSize;
+    
+    void updateSynth(const int index);
     void setupAudio();
 };
 

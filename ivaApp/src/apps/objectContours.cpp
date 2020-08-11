@@ -26,6 +26,8 @@ void objectContours::setup(){
     bLearnBakground = true;
     threshold = 80;
     
+    maxAreaSize = 320 * 240; // video size
+    
     setupAudio();
 }
 
@@ -59,10 +61,10 @@ void objectContours::update(){
 
         // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
         // also, find holes is set to true so we will get interior contours as well....
-        contourFinder.findContours(grayDiff, 20, (340*240)/3, 10, true);    // find holes
+        // limited to max 10 contours -> 10 synths
+        contourFinder.findContours(grayDiff, 20, (340*240)/3, numSynths, false);
     }
 }
-
 
 //--------------------------------------------------------------
 void objectContours::draw(){
@@ -94,12 +96,31 @@ void objectContours::draw(){
         
         // draw over the centroid if the blob is a hole
         ofSetColor(255);
-        if(contourFinder.blobs[i].hole){
-            ofDrawBitmapString("hole",
-                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
-                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
-        }
+//        if(contourFinder.blobs[i].hole){
+//            ofDrawBitmapString("hole",
+//                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+//                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+//        }
+        
+        
+//        ofDrawBitmapString(contourFinder.blobs[i].area,
+//            contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+//            contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+//        ofDrawBitmapString(i,
+//            contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+//            contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+        
+        
+        updateSynth(i);
+            
     }
+    
+    // see updateSynth
+//    if (contourFinder.nBlobs < 10) {
+//        for (int i = contourFinder.nBlobs; i < 10; i++){
+//            synth.setAmplitude(i, 0);
+//        }
+//    }
 
     // finally, a report:
     ofSetHexColor(0xffffff);
@@ -109,6 +130,45 @@ void objectContours::draw(){
               << "threshold " << threshold << " (press: +/-)" << endl
               << "num blobs found " << contourFinder.nBlobs << ", fps: " << ofGetFrameRate();
     ofDrawBitmapString(reportStr.str(), 20, 600);
+}
+
+//--------------------------------------------------------------
+void objectContours::updateSynth(const int i){
+    switch (mode) {
+        case TONE_MODE: {
+            break;
+        }
+        case FREQ_HEIGHT_MODE: {
+            float freq = ofMap(contourFinder.blobs[i].boundingRect.getCenter().y, 0, 240, 20, 8000);
+            float amp = ofMap(contourFinder.blobs[i].area, 1, maxAreaSize, 0, .9);
+            synth.setAmplitude(i,amp);
+            synth.setFrequency(i, freq);
+            ofDrawBitmapString(freq,
+                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+            break;
+        }
+        case FREQ_AREA_MODE: {
+            float freq = ofMap(contourFinder.blobs[i].area, 1, maxAreaSize, 20, 20000);
+            if (synth.getAmplitude(i) != 0.5) {
+                synth.setAmplitude(i, 0.5);
+            }
+            synth.setFrequency(i, freq);
+            ofDrawBitmapString(freq,
+                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+            break;
+        }
+        default: {
+            cout << "Unknown mode is set: " << mode << endl;
+            break;
+        }
+    }
+    if (i+1 == contourFinder.nBlobs && contourFinder.nBlobs < 10) {
+        for (int i = contourFinder.nBlobs; i < 10; i++){
+            synth.setAmplitude(i, 0);
+        }
+    }
 }
 
 
@@ -132,7 +192,7 @@ void objectContours::setupAudio() {
     ofSoundStreamSettings settings;
     settings.numOutputChannels = 2;
     settings.sampleRate = 44100;
-    settings.bufferSize = 1024; // increased buffer size seems necessary here
+    settings.bufferSize = 512; // increased buffer size seems necessary here
     settings.numBuffers = 4;
     settings.setOutListener(this);
     
@@ -143,8 +203,9 @@ void objectContours::setupAudio() {
     // - start the stream and hence have a continious connection to audio in & out
     soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
     
-    synth.addOscillator(ofDCO::SINE);
-    synth.setSampleRate(0, settings.sampleRate);
+    for (int i=0; i<numSynths; i++) {
+        synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0);
+    }
 }
 
 void objectContours::keyPressed(int key){
