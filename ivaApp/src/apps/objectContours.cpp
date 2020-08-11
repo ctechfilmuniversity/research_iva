@@ -83,64 +83,74 @@ void objectContours::draw(){
     ofSetHexColor(0xffffff);
 
     // we could draw the whole contour finder
-    //contourFinder.draw(360,540);
+    contourFinder.draw(360,540);
 
     // or, instead we can draw each blob individually from the blobs vector,
     // this is how to get access to them:
     for (int i = 0; i < contourFinder.nBlobs; i++){
-        contourFinder.blobs[i].draw(360,540);
+        //contourFinder.blobs[i].draw(360,540);
         
-//        cout << contourFinder.blobs[i].area << endl;
-//        cout << contourFinder.blobs[i].length << endl;
-//        cout << contourFinder.blobs[i].nPts << endl;
+        //        cout << contourFinder.blobs[i].area << endl;
+        //        cout << contourFinder.blobs[i].length << endl;
+        //        cout << contourFinder.blobs[i].nPts << endl;
         
         // draw over the centroid if the blob is a hole
-        ofSetColor(255);
-//        if(contourFinder.blobs[i].hole){
-//            ofDrawBitmapString("hole",
-//                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
-//                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
-//        }
         
-        
-//        ofDrawBitmapString(contourFinder.blobs[i].area,
-//            contourFinder.blobs[i].boundingRect.getCenter().x + 360,
-//            contourFinder.blobs[i].boundingRect.getCenter().y + 540);
-//        ofDrawBitmapString(i,
-//            contourFinder.blobs[i].boundingRect.getCenter().x + 360,
-//            contourFinder.blobs[i].boundingRect.getCenter().y + 540);
-        
-        
+        //        if(contourFinder.blobs[i].hole){
+        //            ofDrawBitmapString("hole",
+        //                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+        //                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+        //        }
         updateSynth(i);
-            
+    }
+    muteRemainingSynths();
+
+    string modeStr = "Mode: Frequency Area Mode";
+    switch (mode) {
+        case TONE_MODE: {
+            modeStr = "Mode: Tone Mode";
+            break;
+        }
+        case FREQ_HEIGHT_MODE: {
+            modeStr = "Mode: Frequency Height Mode";
+            break;
+        }
+        case FREQ_AREA_MODE:
+        default: {
+            modeStr = "Mode: Frequency Area Mode";
+            break;
+        }
     }
     
-    // see updateSynth
-//    if (contourFinder.nBlobs < 10) {
-//        for (int i = contourFinder.nBlobs; i < 10; i++){
-//            synth.setAmplitude(i, 0);
-//        }
-//    }
-
     // finally, a report:
     ofSetHexColor(0xffffff);
     stringstream reportStr;
     reportStr << "bg subtraction and blob detection" << endl
               << "press ' ' to capture bg" << endl
               << "threshold " << threshold << " (press: +/-)" << endl
-              << "num blobs found " << contourFinder.nBlobs << ", fps: " << ofGetFrameRate();
+              << "num blobs found " << contourFinder.nBlobs << ", fps: " << ofGetFrameRate() << endl
+              << modeStr << endl
+              << "Press 'm' to toggle mode";
     ofDrawBitmapString(reportStr.str(), 20, 600);
 }
 
 //--------------------------------------------------------------
 void objectContours::updateSynth(const int i){
+    ofSetColor(255);
     switch (mode) {
         case TONE_MODE: {
+            float amp = ofMap(contourFinder.blobs[i].area, 1, maxAreaSize, .2, .9);
+            float freq = 220 * pow(2,(synthTones.at(i)/12.f));
+            synth.setAmplitude(i,amp);
+            synth.setFrequency(i, freq);
+            ofDrawBitmapString(freq,
+                contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+                contourFinder.blobs[i].boundingRect.getCenter().y + 540);
             break;
         }
         case FREQ_HEIGHT_MODE: {
-            float freq = ofMap(contourFinder.blobs[i].boundingRect.getCenter().y, 0, 240, 20, 8000);
-            float amp = ofMap(contourFinder.blobs[i].area, 1, maxAreaSize, 0, .9);
+            float freq = ofMap(contourFinder.blobs[i].boundingRect.getCenter().y, 240, 0, 20, 8000);
+            float amp = ofMap(contourFinder.blobs[i].area, 1, maxAreaSize, .2, .9);
             synth.setAmplitude(i,amp);
             synth.setFrequency(i, freq);
             ofDrawBitmapString(freq,
@@ -164,13 +174,16 @@ void objectContours::updateSynth(const int i){
             break;
         }
     }
-    if (i+1 == contourFinder.nBlobs && contourFinder.nBlobs < 10) {
+}
+
+//--------------------------------------------------------------
+void objectContours::muteRemainingSynths(){
+    if (contourFinder.nBlobs < 10) {
         for (int i = contourFinder.nBlobs; i < 10; i++){
             synth.setAmplitude(i, 0);
         }
     }
 }
-
 
 //--------------------------------------------------------------
 void objectContours::audioOut(ofSoundBuffer &outBuffer) {
@@ -192,7 +205,7 @@ void objectContours::setupAudio() {
     ofSoundStreamSettings settings;
     settings.numOutputChannels = 2;
     settings.sampleRate = 44100;
-    settings.bufferSize = 512; // increased buffer size seems necessary here
+    settings.bufferSize = 1024; // increased buffer size seems necessary here
     settings.numBuffers = 4;
     settings.setOutListener(this);
     
@@ -205,6 +218,25 @@ void objectContours::setupAudio() {
     
     for (int i=0; i<numSynths; i++) {
         synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0);
+    }
+}
+
+//--------------------------------------------------------------
+void objectContours::toggleMode() {
+    switch (mode) {
+        case TONE_MODE: {
+            mode = FREQ_HEIGHT_MODE;
+            break;
+        }
+        case FREQ_HEIGHT_MODE: {
+            mode = FREQ_AREA_MODE;
+            break;
+        }
+        case FREQ_AREA_MODE:
+        default: {
+            mode = TONE_MODE;
+            break;
+        }
     }
 }
 
@@ -221,6 +253,8 @@ void objectContours::keyPressed(int key){
             threshold --;
             if (threshold < 0) threshold = 0;
             break;
+        case 'm':
+            toggleMode();
     }
 }
 

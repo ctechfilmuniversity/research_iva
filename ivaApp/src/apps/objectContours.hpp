@@ -63,13 +63,18 @@ private:
     int                 threshold;
     bool                bLearnBakground;
     
-    //int mode = FREQ_AREA_MODE;
-    int mode = FREQ_HEIGHT_MODE;
+    int mode = FREQ_AREA_MODE;
+    //int mode = FREQ_HEIGHT_MODE;
+    //int mode = TONE_MODE;
     int numSynths = 10;
     int maxAreaSize;
     
+    std::vector<int> synthTones {-5, -2, 0, 3, 5, 7, 10, 12, 15, 17};
+    
     void updateSynth(const int index);
+    void muteRemainingSynths();
     void setupAudio();
+    void toggleMode();
 };
 
 
