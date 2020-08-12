@@ -11,7 +11,6 @@ void clausen::setup(){
     width = 512;
     height = 512;
     
-    ofSetWindowTitle("Slitscan example");
     ofBackground(33);
     
     // Init grabber
