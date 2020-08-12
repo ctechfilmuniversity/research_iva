@@ -3,7 +3,6 @@
 #include "stimberg.h"
 
 void stimberg::setup() {
-    ofSetWindowTitle("Flow example");
     ofSetVerticalSync(true);
 //    ofSetFrameRate(60);
     cam.setup(640, 480);
