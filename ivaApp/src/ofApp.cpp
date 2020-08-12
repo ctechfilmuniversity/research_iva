@@ -4,12 +4,15 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     apps = {
-        new brennecke(),
-        new clausen(),
-        new traber(),
-        new stimberg(),
-        new dittmann(),
-        new objectContours()
+//        new brennecke(),
+//        new clausen(),
+//        new traber(),
+//        new stimberg(),
+//        new dittmann(),
+//        new objectContours()
+        
+        // TODO: Auf diese Weise werden dann die einzelnen Instrumente initialisiert, indem die pdsp engine mit dem Konstruktor übergeben wird.
+        new traber(engine)
     };
     
     apps[appIndex]->setup();

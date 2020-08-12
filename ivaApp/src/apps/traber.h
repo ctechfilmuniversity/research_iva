@@ -14,6 +14,7 @@
 class traber : public ivaApp {
 public:
     
+    // TODO: So muss der Konstruktor implementiert werden, ansonsten meckert der Compiler.
     traber(pdsp::Engine & engine) : ivaApp(engine){};
     
     void setup();
@@ -34,9 +35,7 @@ public:
     
     void shutdownApp();
 
-    //pdsp::Engine            engine;
-    pdsp::VAOscillator      osc;
-    pdsp::ValueControl      pitch_ctrl;
+    
     
     
     //----------------------------------------------------------
@@ -97,8 +96,12 @@ private:
     // https://medium.com/swlh/c-mutex-write-your-first-concurrent-code-69ac8b332288
     std::mutex audioMutex{};
     
-    ofSoundStream soundStream{};
-    ofSoundBuffer lastBuffer{};
+//    ofSoundStream soundStream{};
+//    ofSoundBuffer lastBuffer{};
+    
+    pdsp::VAOscillator      osc;
+    pdsp::ValueControl      pitch_ctrl;
+    pdsp::ParameterAmp      osc_amp;
     
     ofPolyline toneLines{};
 };

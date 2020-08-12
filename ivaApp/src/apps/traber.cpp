@@ -65,7 +65,7 @@ void traber::update(){
 
 void traber::updateToneAndIndex() {
     calculateToneIndex();
-    synth.setFrequency(0, 220 * pow(2,(synthTones.at(currentToneIndex)/12.f)));
+    pitch_ctrl.set(57 + synthTones.at(currentToneIndex));
     
     //index < fboSize ? index++ : index=0;
     if (index < fboSize) {
@@ -271,13 +271,18 @@ void traber::setupAudio() {
 //    synth.setSampleRate(0, settings.sampleRate);
     
     pitch_ctrl >> osc.in_pitch();
-    osc.out_sine() * dB(-12.0f) >> engine.audio_out(0); // connect to left output channel
-    osc.out_sine() * dB(-12.0f) >> engine.audio_out(1); // connect to right right channel
+    
+    osc.out_sine() >> osc_amp >> engine.audio_out(0); // connect to left output channel
+    osc.out_sine() >> osc_amp >> engine.audio_out(1); // connect to right right channel
+    
+    
+    //pitch_ctrl.enableSmoothing(50.0f); // 50ms smoothing — quick changes to pitch seem to work fine with pdsp without smoothing enabled
+    osc_amp.enableSmoothing(50.0f); // 50ms smoothing — solves click sound when stopping this instrument
+    osc_amp.set(.5f);
     
     engine.listDevices();
     engine.setDeviceID(1);
     engine.setup( 44100, 512, 3);
-    
 }
 
 void traber::keyPressed(int key){
@@ -306,10 +311,9 @@ void traber::changeRecordMode(const bool mode) {
 void traber::changeRunning(const bool run) {
     running = run;
     if (running) {
-        //synth.setAmplitude(0, ofSynth2::AMPLITUDE);
-        synth.setAmplitude(0, 0.5);
+        osc_amp.set(.5f);
     } else {
-        synth.setAmplitude(0, 0);
+        osc_amp.set(.0f);
     }
 }
 
@@ -360,8 +364,8 @@ void traber::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void traber::shutdownApp(){
-    soundStream.close();
-    lastBuffer.clear();
+//    soundStream.close();
+//    lastBuffer.clear();
     grabber.close();
     fbo.clear();
     grayImage.clear();
