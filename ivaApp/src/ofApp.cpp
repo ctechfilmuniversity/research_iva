@@ -8,7 +8,8 @@ void ofApp::setup(){
         new clausen(),
         new traber(),
         new stimberg(),
-        new dittmann()
+        new dittmann(),
+        new objectContours()
     };
     
     apps[appIndex]->setup();
