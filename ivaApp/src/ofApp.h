@@ -7,6 +7,7 @@
 #include "apps/traber.h"
 #include "apps/stimberg.h"
 #include "apps/dittmann.h"
+#include "apps/objectContours.hpp"
 
 
 class ofApp : public ofBaseApp {
