@@ -1,127 +1,104 @@
 #include "ofApp.h"
 
 
-
 //--------------------------------------------------------------
 void ofApp::setup(){
-    // TODO: Technically very well done, conceptually, I would like to change the approach of having several apps. To be discussed.
-
-//    currentApp = &brenneckeApp;
-    //theFirstApp.setup();
-    currentApp = &traberApp;
-    currentApp->setup();
+    apps = {
+        new brennecke(),
+        new clausen(),
+        new traber(),
+        new stimberg(),
+        new dittmann()
+    };
+    
+    apps[appIndex]->setup();
 }
-
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    currentApp->update();
+    apps[appIndex]->update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-    currentApp->draw();
+    apps[appIndex]->draw();
 }
-
-////--------------------------------------------------------------
-//void ofApp::audioOut(ofSoundBuffer &outBuffer) {
-//    currentApp->audioOut(outBuffer);
-//}
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    switch (key) {
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-            switchApp(key);
-            return;
-        default:
-            break;
+    // Works only with numbers 1 till 9 on keyboard
+    if (key >= 49 && key <= 49 + apps.size() -1) {
+        switchApp(key);
+        return;
     }
-    currentApp->keyPressed(key);
+    apps[appIndex]->keyPressed(key);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    currentApp->keyReleased(key);
+    apps[appIndex]->keyReleased(key);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    currentApp->mouseMoved(x,y);
+    apps[appIndex]->mouseMoved(x,y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    currentApp->mouseDragged(x,y,button);
+    apps[appIndex]->mouseDragged(x,y,button);
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    currentApp->mousePressed(x,y,button);
+    apps[appIndex]->mousePressed(x,y,button);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    currentApp->mouseReleased(x,y,button);
+    apps[appIndex]->mouseReleased(x,y,button);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y){
-    currentApp->mouseEntered(x,y);
+    apps[appIndex]->mouseEntered(x,y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
-    currentApp->mouseExited(x,y);
+    apps[appIndex]->mouseExited(x,y);
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-    currentApp->windowResized(w,h);
+    apps[appIndex]->windowResized(w,h);
 }
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
-    currentApp->gotMessage(msg);
+    apps[appIndex]->gotMessage(msg);
 }
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
-    currentApp->dragEvent(dragInfo);
+    apps[appIndex]->dragEvent(dragInfo);
 }
 
 //--------------------------------------------------------------
 void ofApp::switchApp(int key){
     cout << "## switchApp called" << endl;
     cout << "## switchApp shutting down current app" << endl;
-    currentApp->shutdownApp();
-//    switch (key) {
-//        case '1':
-//        default:
-//            currentApp = &brenneckeApp;
-//            break;
-//        case '2':
-//            currentApp = &clausenApp;
-//            break;
-//        case '3':
-//            currentApp = &traberApp;
-//            break;
-//        case '4':
-//            currentApp = &stimbergApp;
-//            break;
-//        case '5':
-//            currentApp = &dittmannApp;
-//            break;
-//
-//    }
+    apps[appIndex]->shutdownApp();
+    
+    // Works only with numbers 1 till 9 on keyboard
+    appIndex = key - 49;
     
     // Reset Window Shape to original shape
     ofSetWindowShape(512, 384);
     
+    // set window title after typeid name
+    ofSetWindowTitle(typeid(*apps[appIndex]).name());
+    
     cout << "## Calling setup function of new app" << endl;
-    currentApp->setup();
+    apps[appIndex]->setup();
 }

@@ -1,6 +1,5 @@
 name: build
 
-# Triggered every time something is pushed to the master and also when creating a pull request into the master
 on:
   # push:
   #   branches: [ master ]
@@ -9,7 +8,6 @@ on:
 
 jobs:
   build-ubuntu:
-    # the build server's operating system
     runs-on: ubuntu-latest
 
     steps:
@@ -39,13 +37,13 @@ jobs:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
 
-      # Update poco, a component of ofx (seems not necessary right now)
-      # - name: Update poco (component of ofx)
-      #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
+      # # Update poco, a component of ofx (seems not necessary right now)
+      # # - name: Update poco (component of ofx)
+      # #   run: bash ./ofx/scripts/apothecary/apothecary/apothecary -t linux64 update poco
       
       # The OS needs certain dependencies in order to be able to compile the project.
       - name: Install ofx dependencies
-        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh
+        run: sudo bash ./ofx/scripts/linux/ubuntu/install_dependencies.sh -y
 
       # Downloading additional libs for ofx
       - name: Download ofx libs
@@ -54,6 +52,21 @@ jobs:
       # Build openFrameworks
       - name: Building openFrameworks
         run: bash ./ofx/scripts/linux/compileOF.sh
+
+      # - name: Install project generator
+      #   run: |
+      #     cd ./ofx/
+      #     rm -rf projectGenerator
+      #     mkdir -p ./projectGenerator
+      #     cd ./projectGenerator
+      #     echo "Downloading projectGenerator from ci server"
+      #     wget http://ci.openframeworks.cc/projectGenerator/projectGenerator_linux
+      #     chmod +x projectGenerator_linux
+      #     sudo apt install libglew-dev
+
+      # - name: Create new makefiles with project generator
+      #   run: |
+      #     ./ofx/projectGenerator/projectGenerator_linux -o"./ofx" -p"linux" ./iva/ivaApp
 
       # Building the project
       - name: Building IVA
@@ -132,59 +145,69 @@ jobs:
 
 
 
-  # build-windows:
-  #   # the build server's operating system
-  #   runs-on: windows-latest
+  build-windows:
+    # the build server's operating system
+    runs-on: windows-2016
 
-  #   steps:
-  #     # Checking out our iva repo into the folder "iva"
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         path: iva
+    steps:
+      # Checking out our iva repo into the folder "iva"
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: iva
       
-  #     # Checking out openFrameworks with submodules into the folder "ofx"
-  #     - name: Checkout openFrameworks
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository:  openframeworks/openFrameworks
-  #         path: ofx
-  #         submodules: true
+      # Checking out openFrameworks with submodules into the folder "ofx"
+      - name: Checkout openFrameworks
+        uses: actions/checkout@v2
+        with:
+          repository:  openframeworks/openFrameworks
+          path: ofx
+          submodules: true
+
+      - name: Download and install ofx libs
+        shell: cmd
+        run: |
+          echo on
+          powershell -File ./ofx/scripts/vs/download_libs.ps1 -platform vs2017
+
+      # Addons: Checking out additional addons into the correct openFrameworks directory
+      - name: Checkout ofxCv addon
+        uses: actions/checkout@v2
+        with:
+          repository:  kylemcdonald/ofxCv
+          path: ofx/addons/ofxCv
+      - name: Checkout ofxMidi addon
+        uses: actions/checkout@v2
+        with:
+          repository:  danomatika/ofxMidi
+          path: ofx/addons/ofxMidi
+
+      - name: Install project generator
+        run: |
+          mkdir -p ./ofx/projectGenerator
+          cd ./ofx/projectGenerator
+          echo "Downloading projectGenerator from ci server"
+          iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
+          unzip projectGenerator-vs.zip
+          rm projectGenerator-vs.zip
       
-  #     # Addons: Checking out additional addons into the correct openFrameworks directory
-  #     - name: Checkout ofxCv addon
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository:  kylemcdonald/ofxCv
-  #         path: ofx/addons/ofxCv
-  #     - name: Checkout ofxMidi addon
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository:  danomatika/ofxMidi
-  #         path: ofx/addons/ofxMidi
+      - name: Create project files for visual studio
+        run: |
+          ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
 
-  #     # Downloading additional libs for ofx
-  #     - name: Download ofx libs
-  #       run: |
-  #         ./ofx/scripts/vs/download_libs.sh -p vs2017
-  #         mkdir -p ./ofx/projectGenerator
-  #         cd ./ofx/projectGenerator
-  #         echo "Downloading projectGenerator from ci server"
-  #         iwr -outf projectGenerator-vs.zip http://ci.openframeworks.cc/projectGenerator/projectGenerator-vs.zip
-  #         unzip projectGenerator-vs.zip
-  #         rm projectGenerator-vs.zip
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.1
 
-  #     - name: Build
-  #       run: |
-  #         ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
-  #         SET OF_ROOT=${{ github.workspace }}/ofx
-  #         cd ./iva/ivaApp
-  #         dir
-  #         MSBuild.exe ivaApp.vcxproj /t:build /nologo /noautoresponse /maxcpucount /p:Configuration=Release
+      - name: Build
+        run: |
+          SET OF_ROOT=${{ github.workspace }}/ofx
+          cd ./iva/ivaApp
+          dir
+          msbuild ivaApp.vcxproj /t:build /nologo /noautoresponse /maxcpucount /p:Configuration=Release
 
-  #     # Upload executable binaries to GitHub
-  #     - name: Uploading artifacts
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: Mac Os Artifacts
-  #         path: ./iva/ivaApp/bin/
+      # Upload executables to GitHub
+      - name: Uploading artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Windows Artifacts
+          path: ./iva/ivaApp/bin/
