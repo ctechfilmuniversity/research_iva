@@ -42,7 +42,7 @@ This instrument visualizes a sine oscillator. By pressing 'f' and moving the mou
 ![1 Brennecke](screenshots/01_brennecke.png)
 
 ### 2 Clausen
-This instrument visualizes records 512 1px-columns via the webcam with a slitscan approach. When the recording is finished, the pixel values are being converted to greyscale. Then the recorded pixel values of each pixel column are made audible by mapping the pixel values to fequencies.
+This instrument records 512 1px-columns via the webcam with a slitscan approach. When the recording is finished, the pixel values are being converted to greyscale. Then the recorded pixel values of each pixel column are made audible by mapping the pixel values to fequencies.
 
 ![2 Clausen](screenshots/02_clausen.png)
 
