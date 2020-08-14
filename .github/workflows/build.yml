@@ -46,11 +46,6 @@ jobs:
         with:
           repository:  npisanti/ofxAudioFile
           path: ofx/addons/ofxAudioFile
-      - name: Checkout ofxOsc addon
-        uses: actions/checkout@v2
-        with:
-          repository:  palida/ofxOsc
-          path: ofx/addons/ofxOsc
           
 
       # # Update poco, a component of ofx (seems not necessary right now)
@@ -138,11 +133,6 @@ jobs:
         with:
           repository:  npisanti/ofxAudioFile
           path: ofx/addons/ofxAudioFile
-      - name: Checkout ofxOsc addon
-        uses: actions/checkout@v2
-        with:
-          repository:  palida/ofxOsc
-          path: ofx/addons/ofxOsc
       
       # Downloading additional libs for ofx
       - name: Download ofx libs
@@ -222,11 +212,6 @@ jobs:
         with:
           repository:  npisanti/ofxAudioFile
           path: ofx/addons/ofxAudioFile
-      - name: Checkout ofxOsc addon
-        uses: actions/checkout@v2
-        with:
-          repository:  palida/ofxOsc
-          path: ofx/addons/ofxOsc
 
       - name: Install project generator
         run: |
