@@ -36,6 +36,11 @@ jobs:
         with:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
+      - name: Checkout ofxPDSP addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxPDSP
+          path: ofx/addons/ofxPDSP
 
       # # Update poco, a component of ofx (seems not necessary right now)
       # # - name: Update poco (component of ofx)
@@ -112,6 +117,11 @@ jobs:
         with:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
+      - name: Checkout ofxPDSP addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxPDSP
+          path: ofx/addons/ofxPDSP
 
       # Downloading additional libs for ofx
       - name: Download ofx libs
@@ -181,6 +191,11 @@ jobs:
         with:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
+      - name: Checkout ofxPDSP addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxPDSP
+          path: ofx/addons/ofxPDSP
 
       - name: Install project generator
         run: |
