@@ -41,6 +41,17 @@ jobs:
         with:
           repository:  npisanti/ofxPDSP
           path: ofx/addons/ofxPDSP
+      - name: Checkout ofxAudioFile addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxAudioFile
+          path: ofx/addons/ofxAudioFile
+      - name: Checkout ofxOsc addon
+        uses: actions/checkout@v2
+        with:
+          repository:  palida/ofxOsc
+          path: ofx/addons/ofxOsc
+          
 
       # # Update poco, a component of ofx (seems not necessary right now)
       # # - name: Update poco (component of ofx)
@@ -122,7 +133,17 @@ jobs:
         with:
           repository:  npisanti/ofxPDSP
           path: ofx/addons/ofxPDSP
-
+      - name: Checkout ofxAudioFile addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxAudioFile
+          path: ofx/addons/ofxAudioFile
+      - name: Checkout ofxOsc addon
+        uses: actions/checkout@v2
+        with:
+          repository:  palida/ofxOsc
+          path: ofx/addons/ofxOsc
+      
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: bash ./ofx/scripts/osx/download_libs.sh
@@ -196,6 +217,16 @@ jobs:
         with:
           repository:  npisanti/ofxPDSP
           path: ofx/addons/ofxPDSP
+      - name: Checkout ofxAudioFile addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxAudioFile
+          path: ofx/addons/ofxAudioFile
+      - name: Checkout ofxOsc addon
+        uses: actions/checkout@v2
+        with:
+          repository:  palida/ofxOsc
+          path: ofx/addons/ofxOsc
 
       - name: Install project generator
         run: |
