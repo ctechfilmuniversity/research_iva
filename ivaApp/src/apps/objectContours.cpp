@@ -7,8 +7,6 @@
 
 #include "objectContours.hpp"
 
-#include "objectContours.hpp"
-
 //--------------------------------------------------------------
 void objectContours::setup(){
     ofSetWindowShape(1024, 786);
