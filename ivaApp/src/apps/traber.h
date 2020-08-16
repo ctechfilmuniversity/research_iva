@@ -58,6 +58,7 @@ private:
     void drawTextInfo();
 
 
+    // TODO: Check the definiton
     void setupAudio();
     void setupGui();
     
@@ -88,7 +89,8 @@ private:
     // https://medium.com/swlh/c-mutex-write-your-first-concurrent-code-69ac8b332288
     std::mutex audioMutex{};
     
-    ofSoundStream soundStream{};
+    // TODO: Must be removed 
+    //ofSoundStream soundStream{};
     ofSoundBuffer lastBuffer{};
     
     ofPolyline toneLines{};

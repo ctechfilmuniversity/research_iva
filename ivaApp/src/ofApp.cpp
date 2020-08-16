@@ -5,10 +5,8 @@
 void ofApp::setup(){
     apps = {
         new brennecke(),
-        new clausen(),
         new traber(),
         new stimberg(),
-        new dittmann(),
         new objectContours()
     };
     

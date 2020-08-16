@@ -198,21 +198,8 @@ void objectContours::audioOut(ofSoundBuffer &outBuffer) {
 
 //--------------------------------------------------------------
 void objectContours::setupAudio() {
-    // start the sound stream with a sample rate of 44100 Hz, and a buffer
-    // size of 512 samples per audioOut() call
-    ofSoundStreamSettings settings;
-    settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
-    settings.bufferSize = 1024; // increased buffer size seems necessary here
-    settings.numBuffers = 4;
-    settings.setOutListener(this);
-    
-    // the following setup function initiates the whole audio connection
-    // it invokes the underlying RTAudioSoundStream to
-    // - create an RtAudio object
-    // - connect the object to the RtAudioCallback function
-    // - start the stream and hence have a continious connection to audio in & out
-    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
+
+    ivaApp::setupAudio();
     
     for (int i=0; i<numSynths; i++) {
         synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0);

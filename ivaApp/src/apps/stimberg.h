@@ -32,12 +32,12 @@ private:
     //ofSynthStimberg synth{8};
     ofSynth2 synth2{};
 
-    ofSoundStream soundStream{};
+    
     ofSoundBuffer lastBuffer{};
     std::mutex audioMutex{};
     
     ofxCvColorImage colorImg;
-    
-    void setupAudio();
+  
+
     void setupSynth();
 };

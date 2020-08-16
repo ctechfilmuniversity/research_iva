@@ -166,27 +166,6 @@ void stimberg::audioOut(ofSoundBuffer &outBuffer) {
 }
 
 
-
-//--------------------------------------------------------------
-void stimberg::setupAudio() {
-    
-    // start the sound stream with a sample rate of 44100 Hz, and a buffer
-    // size of 512 samples per audioOut() call
-    ofSoundStreamSettings settings;
-    settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
-    settings.bufferSize = 512;
-    settings.numBuffers = 4;
-    settings.setOutListener(this);
-    
-    // the following setup function initiates the whole audio connection
-    // it invokes the underlying RTAudioSoundStream to
-    // - create an RtAudio object
-    // - connect the object to the RtAudioCallback function
-    // - start the stream and hence have a continious connection to audio in & out
-    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
-}
-
 //--------------------------------------------------------------
 void stimberg::setupSynth() {
     const std::array<float, 8> frequencies = {

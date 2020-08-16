@@ -121,46 +121,6 @@ void brennecke::mouseMoved(int x, int y ){
 }
 
 //--------------------------------------------------------------
-void brennecke::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void brennecke::dragEvent(ofDragInfo dragInfo){
-
-}
-
-//--------------------------------------------------------------
 void brennecke::drawHelpText() {
  
     std::string freqString = std::to_string(synth.getFrequency(id_sine1));
@@ -171,21 +131,8 @@ void brennecke::drawHelpText() {
 
 //--------------------------------------------------------------
 void brennecke::setupAudio() {
-    // start the sound stream with a sample rate of 44100 Hz, and a buffer
-    // size of 512 samples per audioOut() call
-    ofSoundStreamSettings settings;
-    settings.numOutputChannels = 2;
-    settings.sampleRate = synth.SAMPLE_RATE;
-    settings.bufferSize = 512;
-    settings.numBuffers = 4;
-    settings.setOutListener(this);
-    
-    // the following setup function initiates the whole audio connection
-    // it invokes the underlying RTAudioSoundStream to
-    // - create an RtAudio object
-    // - connect the object to the RtAudioCallback function
-    // - start the stream and hence have a continious connection to audio in & out
-    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
+
+    ivaApp::setupAudio();
     
     // Setup all oscillators
     id_sine1 = synth.addOscillator(ofDCO::SINE, synth.SAMPLE_RATE, synth.FUNDAMENTAL_FREQ, 0.3);

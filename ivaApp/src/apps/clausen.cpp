@@ -205,45 +205,6 @@ void clausen::keyPressed(int key){
 
 }
 
-//--------------------------------------------------------------
-void clausen::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void clausen::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void clausen::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void clausen::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void clausen::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void clausen::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void clausen::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void clausen::dragEvent(ofDragInfo dragInfo){
-
-}
 
 void clausen::audioOut(ofSoundBuffer &outBuffer){
     if(filtered) {

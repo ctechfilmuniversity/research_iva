@@ -1,0 +1,53 @@
+2020-08-13 14:23:53.956546+0200 ivaAppDebug[7046:112740] [plugin] AddInstanceForFactory: No factory registered for id <CFUUID 0x6000002507c0> F8BB1C28-BAE8-11D6-9C31-00039315CD46
+2020-08-13 14:23:54.009899+0200 ivaAppDebug[7046:112740]  HALC_ShellDriverPlugIn::Open: Can't get a pointer to the Open routine
+2020-08-13 14:23:54.010322+0200 ivaAppDebug[7046:112740]  HALC_ShellDriverPlugIn::Open: Can't get a pointer to the Open routine
+2020-08-13 14:23:54.044224+0200 ivaAppDebug[7046:112740] [plugin] AddInstanceForFactory: No factory registered for id <CFUUID 0x600000254800> 30010C1C-93BF-11D8-8B5B-000A95AF9C6A
+2020-08-13 14:23:54.063289+0200 ivaAppDebug[7046:112740] [General] An uncaught exception was raised
+2020-08-13 14:23:54.063359+0200 ivaAppDebug[7046:112740] [General] *** Can't add a nil AVCaptureInput
+2020-08-13 14:23:54.063448+0200 ivaAppDebug[7046:112740] [General] (
+	0   CoreFoundation                      0x00007fff2dee4b57 __exceptionPreprocess + 250
+	1   libobjc.A.dylib                     0x00007fff66d2b5bf objc_exception_throw + 48
+	2   AVFoundation                        0x00007fff296b07d0 -[AVCaptureDALDevice supportsAVCaptureSessionPreset:] + 0
+	3   AVFoundation                        0x00007fff2968a7a5 -[AVCaptureSession addInput:] + 71
+	4   ivaAppDebug                         0x000000010043331b -[OSXVideoGrabber initCapture:capWidth:capHeight:] + 3207
+	5   ivaAppDebug                         0x00000001004346b9 _ZN21ofAVFoundationGrabber5setupEii + 105
+	6   ivaAppDebug                         0x00000001003f7115 _ZN14ofVideoGrabber5setupEiib + 115
+	7   ivaAppDebug                         0x000000010000e7fd _ZN14ofVideoGrabber5setupEii + 45
+	8   ivaAppDebug                         0x000000010000bdf5 _ZN14ofVideoGrabber11initGrabberEii + 37
+	9   ivaAppDebug                         0x000000010001074c _ZN6traber5setupEv + 92
+	10  ivaAppDebug                         0x0000000100004b5a _ZN5ofApp5setupEv + 186
+	11  ivaAppDebug                         0x00000001004198ef _ZNSt3__110__function6__funcIZN7ofEventI11ofEventArgsNS_15recursive_mutexEE13make_functionI9ofBaseAppEENS_10shared_ptrIN2of4priv8FunctionIS3_S4_EEEEPT_MSE_FvRS3_EiEUlPKvSG_E_NS_9allocatorISL_EEFbSK_SG_EEclEOSK_SG_ + 37
+	12  ivaAppDebug                         0x00000001003fa7b7 _ZN7ofEventI11ofEventArgsNSt3__115recursive_mutexEE6notifyERS0_ + 149
+	13  ivaAppDebug                         0x00000001004189bb _ZN10ofMainLoop3runENSt3__110shared_ptrI15ofAppBaseWindowEEONS1_I9ofBaseAppEE + 1677
+	14  ivaAppDebug                         0x0000000100418a04 _ZN10ofMainLoop3runEONSt3__110shared_ptrI9ofBaseAppEE + 58
+	15  ivaAppDebug                         0x00000001003f5b29 _Z8ofRunAppP9ofBaseApp + 80
+	16  ivaAppDebug                         0x0000000100002202 main + 98
+	17  libdyld.dylib                       0x00007fff67ed3cc9 start + 1
+	18  ???                                 0x0000000000000003 0x0 + 3
+)
+2020-08-13 14:23:54.063936+0200 ivaAppDebug[7046:112740] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** Can't add a nil AVCaptureInput'
+*** First throw call stack:
+(
+	0   CoreFoundation                      0x00007fff2dee4b57 __exceptionPreprocess + 250
+	1   libobjc.A.dylib                     0x00007fff66d2b5bf objc_exception_throw + 48
+	2   AVFoundation                        0x00007fff296b07d0 -[AVCaptureDALDevice supportsAVCaptureSessionPreset:] + 0
+	3   AVFoundation                        0x00007fff2968a7a5 -[AVCaptureSession addInput:] + 71
+	4   ivaAppDebug                         0x000000010043331b -[OSXVideoGrabber initCapture:capWidth:capHeight:] + 3207
+	5   ivaAppDebug                         0x00000001004346b9 _ZN21ofAVFoundationGrabber5setupEii + 105
+	6   ivaAppDebug                         0x00000001003f7115 _ZN14ofVideoGrabber5setupEiib + 115
+	7   ivaAppDebug                         0x000000010000e7fd _ZN14ofVideoGrabber5setupEii + 45
+	8   ivaAppDebug                         0x000000010000bdf5 _ZN14ofVideoGrabber11initGrabberEii + 37
+	9   ivaAppDebug                         0x000000010001074c _ZN6traber5setupEv + 92
+	10  ivaAppDebug                         0x0000000100004b5a _ZN5ofApp5setupEv + 186
+	11  ivaAppDebug                         0x00000001004198ef _ZNSt3__110__function6__funcIZN7ofEventI11ofEventArgsNS_15recursive_mutexEE13make_functionI9ofBaseAppEENS_10shared_ptrIN2of4priv8FunctionIS3_S4_EEEEPT_MSE_FvRS3_EiEUlPKvSG_E_NS_9allocatorISL_EEFbSK_SG_EEclEOSK_SG_ + 37
+	12  ivaAppDebug                         0x00000001003fa7b7 _ZN7ofEventI11ofEventArgsNSt3__115recursive_mutexEE6notifyERS0_ + 149
+	13  ivaAppDebug                         0x00000001004189bb _ZN10ofMainLoop3runENSt3__110shared_ptrI15ofAppBaseWindowEEONS1_I9ofBaseAppEE + 1677
+	14  ivaAppDebug                         0x0000000100418a04 _ZN10ofMainLoop3runEONSt3__110shared_ptrI9ofBaseAppEE + 58
+	15  ivaAppDebug                         0x00000001003f5b29 _Z8ofRunAppP9ofBaseApp + 80
+	16  ivaAppDebug                         0x0000000100002202 main + 98
+	17  libdyld.dylib                       0x00007fff67ed3cc9 start + 1
+	18  ???                                 0x0000000000000003 0x0 + 3
+)
+libc++abi.dylib: terminating with uncaught exception of type NSException
+(lldb) 
+

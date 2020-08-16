@@ -47,7 +47,7 @@ private:
     // more info on using mutex and locks at
     // https://medium.com/swlh/c-mutex-write-your-first-concurrent-code-69ac8b332288
     std::mutex audioMutex{};
-    ofSoundStream soundStream{};
+    //ofSoundStream soundStream{};
     ofSoundBuffer lastBuffer{};
     ofSynth2 synth{};
     

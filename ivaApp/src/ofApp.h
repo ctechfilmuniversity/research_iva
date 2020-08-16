@@ -3,10 +3,8 @@
 #include "ofMain.h"
 #include "synth/ofSynth.h"
 #include "apps/brennecke.hpp"
-#include "apps/clausen.hpp"
 #include "apps/traber.h"
 #include "apps/stimberg.h"
-#include "apps/dittmann.h"
 #include "apps/objectContours.hpp"
 
 
