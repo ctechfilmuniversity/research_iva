@@ -238,6 +238,8 @@ void traber::debugDraw(){
 
 //--------------------------------------------------------------
 void traber::audioOut(ofSoundBuffer &outBuffer) {
+    
+    // TODO: Check if you can remove this function here and move it to ivaApp 
     synth.fillSoundBuffer(outBuffer);
     
     // THREAD INFO
