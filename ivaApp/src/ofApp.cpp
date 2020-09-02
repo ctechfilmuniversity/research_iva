@@ -14,10 +14,11 @@ void ofApp::setup(){
 //        new objectContours()
 
         //new traber(std::move(enginePtr))
-        new traber(std::move(enginePtr)),
-        new traber(std::move(enginePtr))
+        new traber(),
+        new traber()
     };
     
+    apps[appIndex]->setPDSPengine(std::move(enginePtr));
     apps[appIndex]->setup();
 }
 
@@ -95,17 +96,29 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::switchApp(int key){
     cout << "## switchApp called" << endl;
     cout << "## switchApp shutting down current app" << endl;
-    apps[appIndex]->shutdownApp();
+    //apps[appIndex]->shutdownApp();
+    
+    // reset pdsp
+    enginePtr = std::move(apps[appIndex]->getPDSPengine());
+    resetPDSPengine();
     
     // Works only with numbers 1 till 9 on keyboard
     appIndex = key - 49;
-    
+
     // Reset Window Shape to original shape
     ofSetWindowShape(512, 384);
-    
+
     // set window title after typeid name
     ofSetWindowTitle(typeid(*apps[appIndex]).name());
-    
+
     cout << "## Calling setup function of new app" << endl;
+    apps[appIndex]->setPDSPengine(std::move(enginePtr));
     apps[appIndex]->setup();
+}
+
+//--------------------------------------------------------------
+void ofApp::resetPDSPengine(){
+    enginePtr->audio_out(0).disconnectAll();
+    enginePtr->audio_out(1).disconnectAll();
+    enginePtr->setup( 44100, 512, 3);
 }

@@ -37,4 +37,5 @@ private:
     //pdsp::Engine            engine;
     unique_ptr<pdsp::Engine> enginePtr;
     void switchApp(int key);
+    void resetPDSPengine();
 };

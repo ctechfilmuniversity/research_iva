@@ -33,19 +33,11 @@ public:
     virtual void dragEvent(ofDragInfo dragInfo){};
     virtual void gotMessage(ofMessage msg){};
     
-    unique_ptr<pdsp::Engine> getPDSPengine() {
-        return std::move(enginePtr);
-    }
-    
-    void setPDSPengine(unique_ptr<pdsp::Engine> engine) {
-        enginePtr = std::move(engine);
-    }
+    unique_ptr<pdsp::Engine> getPDSPengine();
+    void setPDSPengine(unique_ptr<pdsp::Engine> engine);
 
 protected:
-//    ivaApp(pdsp::Engine & engine) : engine(engine){}
-//    pdsp::Engine & engine;
-    
-    ivaApp(unique_ptr<pdsp::Engine> engine) : enginePtr(std::move(engine)){}
+//    ivaApp(unique_ptr<pdsp::Engine> engine) : enginePtr(std::move(engine)){}
     unique_ptr<pdsp::Engine> enginePtr;
     
 private:
