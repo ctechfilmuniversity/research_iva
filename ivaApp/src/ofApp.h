@@ -34,6 +34,7 @@ private:
     int appIndex = 0;
     std::vector<ivaApp*> apps;
     
-    pdsp::Engine            engine;
+    //pdsp::Engine            engine;
+    unique_ptr<pdsp::Engine> enginePtr;
     void switchApp(int key);
 };

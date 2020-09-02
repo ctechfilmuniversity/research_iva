@@ -272,17 +272,25 @@ void traber::setupAudio() {
     
     pitch_ctrl >> osc.in_pitch();
     
-    osc.out_sine() >> osc_amp >> engine.audio_out(0); // connect to left output channel
-    osc.out_sine() >> osc_amp >> engine.audio_out(1); // connect to right right channel
+//    osc.out_sine() >> osc_amp >> engine.audio_out(0); // connect to left output channel
+//    osc.out_sine() >> osc_amp >> engine.audio_out(1); // connect to right right channel
+    
+    osc.out_sine() >> osc_amp >> enginePtr->audio_out(0); // connect to left output channel
+    osc.out_sine() >> osc_amp >> enginePtr->audio_out(1); // connect to right right channel
     
     
     //pitch_ctrl.enableSmoothing(50.0f); // 50ms smoothing — quick changes to pitch seem to work fine with pdsp without smoothing enabled
     osc_amp.enableSmoothing(50.0f); // 50ms smoothing — solves click sound when stopping this instrument
     osc_amp.set(.5f);
     
-    engine.listDevices();
-    engine.setDeviceID(1);
-    engine.setup( 44100, 512, 3);
+//    engine.listDevices();
+//    engine.setDeviceID(1);
+//    engine.setup( 44100, 512, 3);
+    
+    
+    enginePtr->listDevices();
+    enginePtr->setDeviceID(1);
+    enginePtr->setup( 44100, 512, 3);
 }
 
 void traber::keyPressed(int key){

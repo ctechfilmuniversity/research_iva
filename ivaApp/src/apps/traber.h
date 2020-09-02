@@ -15,7 +15,9 @@ class traber : public ivaApp {
 public:
     
     // TODO: So muss der Konstruktor implementiert werden, ansonsten meckert der Compiler.
-    traber(pdsp::Engine & engine) : ivaApp(engine){};
+    //traber(pdsp::Engine & engine) : ivaApp(engine){};
+//    traber(unique_ptr<pdsp::Engine> enginePtr) : ivaApp(enginePtr){};
+    traber(unique_ptr<pdsp::Engine> engine) : ivaApp(std::move(engine)){}
     
     void setup();
     void update();

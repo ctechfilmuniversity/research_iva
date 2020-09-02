@@ -12,18 +12,41 @@
 #include "ofxPDSP.h"
 
 //
-class ivaApp : public ofBaseApp {
+class ivaApp {
     
 public:
     virtual void shutdownApp() = 0;
+    
+    virtual void setup(){};
+    virtual void update(){};
+    virtual void draw(){};
+
+    virtual void keyPressed(int key){};
+    virtual void keyReleased(int key){};
+    virtual void mouseMoved(int x, int y ){};
+    virtual void mouseDragged(int x, int y, int button){};
+    virtual void mousePressed(int x, int y, int button){};
+    virtual void mouseReleased(int x, int y, int button){};
+    virtual void mouseEntered(int x, int y){};
+    virtual void mouseExited(int x, int y){};
+    virtual void windowResized(int w, int h){};
+    virtual void dragEvent(ofDragInfo dragInfo){};
+    virtual void gotMessage(ofMessage msg){};
+    
+    unique_ptr<pdsp::Engine> getPDSPengine() {
+        return std::move(enginePtr);
+    }
+    
+    void setPDSPengine(unique_ptr<pdsp::Engine> engine) {
+        enginePtr = std::move(engine);
+    }
 
 protected:
-    // TODO: Hier habe ich den zu implementierenden Konstruktor definiert. Hier wäre noch die Frage ob ich richtig mit der Referenz zur engine umgehe, da ich noch etwas Probleme mit diese ganzen C++ Thematik habe.
-    ivaApp(pdsp::Engine & engine) : engine(engine){}
-    pdsp::Engine & engine;
+//    ivaApp(pdsp::Engine & engine) : engine(engine){}
+//    pdsp::Engine & engine;
     
-    // TODO: Ich hatte auch mal angedacht die Engine als static object zu implementieren. Allerdings habe ich es nicht zum laufen bekommen.
-//    static pdsp::Engine engineStatic;
+    ivaApp(unique_ptr<pdsp::Engine> engine) : enginePtr(std::move(engine)){}
+    unique_ptr<pdsp::Engine> enginePtr;
     
 private:
 //    ivaApp();

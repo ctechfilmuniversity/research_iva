@@ -3,6 +3,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    //unique_ptr<pdsp::Engine> enginePtr (new pdsp::Engine);
+    enginePtr = unique_ptr<pdsp::Engine> (new pdsp::Engine);
     apps = {
 //        new brennecke(),
 //        new clausen(),
@@ -10,9 +12,10 @@ void ofApp::setup(){
 //        new stimberg(),
 //        new dittmann(),
 //        new objectContours()
-        
-        // TODO: Auf diese Weise werden dann die einzelnen Instrumente initialisiert, indem die pdsp engine mit dem Konstruktor übergeben wird.
-        new traber(engine)
+
+        //new traber(std::move(enginePtr))
+        new traber(std::move(enginePtr)),
+        new traber(std::move(enginePtr))
     };
     
     apps[appIndex]->setup();
