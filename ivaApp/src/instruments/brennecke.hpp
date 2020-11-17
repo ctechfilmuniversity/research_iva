@@ -21,8 +21,6 @@ public:
     void update();
     void draw();
 
-    void audioOut(ofSoundBuffer &outBuffer);
-
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
@@ -37,31 +35,30 @@ public:
 
     void shutdownApp();
 private:
-
+    static constexpr float FUNDAMENTAL_FREQ = 172.5;
+    
     // Member functions
-
     void drawHelpText();
     void setupAudio();
     
     // function bound to gui element
     // therefore its scope is defined by ofEvent
     // see ofEventUtils for further information
-    void updateFrequency(float& value);
+    void updateFrequency(const float& value);
 
     
     // Member variables
     float rms{};
-    //float defaultFrequency{172.5};
-    ofSynth2 synth{};
 
     bool changeFreq{false};
     int initialMouseDistY{};
 
-    std::mutex audioMutex{};
-    ofSoundStream soundStream{};
-    ofSoundBuffer lastBuffer{};
     ofPolyline waveform{};
+        
+    pdsp::VAOscillator      osc_1, osc_2, osc_3, osc_4;
+    pdsp::ValueControl      pitch_ctrl_1, pitch_ctrl_2, pitch_ctrl_3, pitch_ctrl_4;
+    pdsp::ParameterAmp      osc_amp;
     
-    int id_sine1, id_sine2, id_sine3, id_sine4, id_pulse1, id_pulse2, id_sawtooth, id_triangle;
+    pdsp::Scope scopeTest;
     
 };

@@ -3,10 +3,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    //unique_ptr<pdsp::Engine> enginePtr (new pdsp::Engine);
     enginePtr = unique_ptr<pdsp::Engine> (new pdsp::Engine);
     apps = {
-//        new brennecke(),
+        new brennecke(),
 //        new clausen(),
 //        new traber(),
 //        new stimberg(),
@@ -14,9 +13,12 @@ void ofApp::setup(){
 //        new objectContours()
 
         //new traber(std::move(enginePtr))
-        new traber(),
         new traber()
     };
+    
+    enginePtr->listDevices();
+    enginePtr->setDeviceID(1);
+    enginePtr->setup( 44100, 512, 3);
     
     apps[appIndex]->setPDSPengine(std::move(enginePtr));
     apps[appIndex]->setup();

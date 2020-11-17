@@ -234,66 +234,15 @@ void traber::debugDraw(){
     ofPopMatrix();
 }
 
-
-//--------------------------------------------------------------
-// void traber::audioOut(ofSoundBuffer &outBuffer) {
-//     synth.fillSoundBuffer(outBuffer);
-//     
-//     // THREAD INFO
-//     // lock_name is the "var" name of the lock guard, kind of
-//     // a variable that is being constructed with a mutex (audioMutex),
-//     // locks the mutex at its construction and unlocks the mutex
-//     // when it is being destroyed, i.e., at the end of the scope
-// 
-//     std::unique_lock<std::mutex> lock_name(audioMutex);
-//     lastBuffer = outBuffer;
-// }
-
 //--------------------------------------------------------------
 void traber::setupAudio() {
-    // start the sound stream with a sample rate of 44100 Hz, and a buffer
-    // size of 512 samples per audioOut() call
-//    ofSoundStreamSettings settings;
-//    settings.numOutputChannels = 2;
-//    settings.sampleRate = 44100;
-//    settings.bufferSize = 1024;
-//    settings.numBuffers = 4;
-//    settings.setOutListener(this);
-    
-    // the following setup function initiates the whole audio connection
-    // it invokes the underlying RTAudioSoundStream to
-    // - create an RtAudio object
-    // - connect the object to the RtAudioCallback function
-    // - start the stream and hence have a continious connection to audio in & out
-//    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
- 
-//    synth.addOscillator(ofDCO::SINE);
-//    synth.setSampleRate(0, settings.sampleRate);
-    
     pitch_ctrl >> osc.in_pitch();
-    
-//    osc.out_sine() >> osc_amp >> engine.audio_out(0); // connect to left output channel
-//    osc.out_sine() >> osc_amp >> engine.audio_out(1); // connect to right right channel
-    
     osc.out_sine() >> osc_amp >> enginePtr->audio_out(0); // connect to left output channel
     osc.out_sine() >> osc_amp >> enginePtr->audio_out(1); // connect to right right channel
-    
     
     //pitch_ctrl.enableSmoothing(50.0f); // 50ms smoothing — quick changes to pitch seem to work fine with pdsp without smoothing enabled
     osc_amp.enableSmoothing(50.0f); // 50ms smoothing — solves click sound when stopping this instrument
     osc_amp.set(.5f);
-    
-//    engine.listDevices();
-//    engine.setDeviceID(1);
-//    engine.setup( 44100, 512, 3);
-    
-    
-    enginePtr->listDevices();
-    enginePtr->setDeviceID(1);
-    enginePtr->setup( 44100, 512, 3);
-}
-
-void traber::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
@@ -337,46 +286,8 @@ void traber::resetToStart() {
 }
 
 //--------------------------------------------------------------
-void traber::mouseMoved(int x, int y ){
-}
-
-//--------------------------------------------------------------
-void traber::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void traber::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void traber::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void traber::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void traber::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void traber::dragEvent(ofDragInfo dragInfo){
-
-}
-
-//--------------------------------------------------------------
 void traber::shutdownApp(){
-//    soundStream.close();
-//    lastBuffer.clear();
     grabber.close();
     fbo.clear();
     grayImage.clear();
-//    audioMutex.unlock();
-//    synth.reset();
 }
