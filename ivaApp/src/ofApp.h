@@ -11,7 +11,7 @@
 
 // you possibly need to adapt this number for your hardware
 // look for your index in the console output when starting
-#define AUDIO_DEVICE 1;
+#define AUDIO_DEVICE 1
 
 class ofApp : public ofBaseApp {
 
