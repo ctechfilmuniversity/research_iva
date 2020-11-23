@@ -1,5 +1,6 @@
 #include "brennecke.hpp"
 
+constexpr float brennecke::FUNDAMENTAL_FREQ;
 
 //--------------------------------------------------------------
 void brennecke::setup(){
@@ -10,28 +11,6 @@ void brennecke::setup(){
 
 //--------------------------------------------------------------
 void brennecke::update(){
-    
-    // "lastBuffer" is shared between update() and audioOut(), which are called
-    // on two different threads. This lock makes sure we don't use lastBuffer
-    // from both threads simultaneously (see the corresponding lock in audioOut())
-
-    // this loop is building up a polyline representing the audio contained in
-    // the left channel of the buffer
-    
-    // the x coordinates are evenly spaced on a grid from 0 to the window's width
-    // the y coordinates map each audio sample's range (-1 to 1) to the height
-    // of the window
-    pdsp::SampleBuffer          sampleData;
-    sampleData.
-//    waveform.clear();
-//    for(size_t i = 0; i < lastBuffer.getNumFrames(); i++) {
-//        float sample = lastBuffer.getSample(i, 0);
-//        float x = ofMap(i, 0, lastBuffer.getNumFrames(), 0, ofGetWidth());
-//        float y = ofMap(sample, -1, 1, 0, ofGetHeight());
-//        waveform.addVertex(x, y);
-//    }
-    
-//    rms = lastBuffer.getRMSAmplitude();
 }
 
 //--------------------------------------------------------------
@@ -39,11 +18,12 @@ void brennecke::draw() {
     
     ofBackground(ofColor::black);
     ofSetColor(ofColor::white);
-    ofSetLineWidth(1 + (rms * 30.));
-    //waveform.draw();
-    
-    scopeTest.draw(0, 0, ofGetWidth(), ofGetHeight());
-    
+
+    // before using pdsp, the thickness of the line was defined by using the following algorithm
+    // 1 + (rms * 30.)
+    // since the line width is hard coded into scope, this is not working right now.
+    // maybe a new class could be implemented based on scope in order to enable this functionality
+    scope.draw(0, 0, ofGetWidth(), ofGetHeight());
     drawHelpText();
 }
 
@@ -97,10 +77,10 @@ void brennecke::mouseMoved(int x, int y ){
         
         // only if we have actually moved the mouse
         if (currentMouseDistY != initialMouseDistY) {
-            if (currentMouseDistY > initialMouseDistY) synth.increaseFrequency(id_sine1);
-            if (currentMouseDistY < initialMouseDistY) synth.decreaseFrequency(id_sine1);
+            if (currentMouseDistY > initialMouseDistY) increaseFrequency();
+            if (currentMouseDistY < initialMouseDistY) decreaseFrequency();
             
-            float frequency = ofClamp(synth.getFrequency(id_sine1), 0.0, 20000.0);
+            float frequency = ofClamp(pitch_ctrl_1.get(), 0.0, 20000.0);
             updateFrequency(frequency);
             
             initialMouseDistY = currentMouseDistY;
@@ -111,7 +91,7 @@ void brennecke::mouseMoved(int x, int y ){
 //--------------------------------------------------------------
 void brennecke::drawHelpText() {
  
-    std::string freqString = std::to_string(synth.getFrequency(id_sine1));
+    std::string freqString = std::to_string(pitch_ctrl_1.get());
     ofDrawBitmapString("Press 'f' and move the mouse in y-direction.", 25, 25);
     ofDrawBitmapString("Press 'r' to reset the frequency.", 25, 40);
     ofDrawBitmapString("Current frequency: " + freqString, 25, 75);
@@ -119,34 +99,45 @@ void brennecke::drawHelpText() {
 
 //--------------------------------------------------------------
 void brennecke::setupAudio() {
-    pitch_ctrl_1 >> osc_1.in_pitch();
-    pitch_ctrl_2 >> osc_2.in_pitch();
-    pitch_ctrl_3 >> osc_3.in_pitch();
-    pitch_ctrl_4 >> osc_4.in_pitch();
-    osc_1.out_sine() >> osc_amp >> enginePtr->audio_out(0);
-    osc_1.out_sine() >> osc_amp >> enginePtr->audio_out(1);
-    osc_2.out_sine() >> osc_amp >> enginePtr->audio_out(0);
-    osc_2.out_sine() >> osc_amp >> enginePtr->audio_out(1);
-    osc_3.out_sine() >> osc_amp >> enginePtr->audio_out(0);
-    osc_3.out_sine() >> osc_amp >> enginePtr->audio_out(1);
-    osc_4.out_sine() >> osc_amp >> enginePtr->audio_out(0);
-    osc_4.out_sine() >> osc_amp >> enginePtr->audio_out(1);
-    
-    osc_1.out_sine() >> osc_amp >> scopeTest >> enginePtr->blackhole();
-    
-    
+    // Defining start values
+    pitch_ctrl_1.set(brennecke::FUNDAMENTAL_FREQ);
+    pitch_ctrl_2.set(200);
+
+    amp_ctrl_1.set(.3f);
+    amp_ctrl_2.set(.5f);
+
     //pitch_ctrl.enableSmoothing(50.0f);
+
+
+    // Patching everything
+    pitch_ctrl_1 >> phasor_1.in_freq();
+    pitch_ctrl_2 >> phasor_2.in_freq();
+
+    phasor_1 >> sine_1 >> amp_ctrl_1 >> enginePtr->audio_out(0);
+    phasor_1 >> sine_1 >> amp_ctrl_1 >> enginePtr->audio_out(1);
+    phasor_2 >> sine_2 >> amp_ctrl_2 >> enginePtr->audio_out(0);
+    phasor_2 >> sine_2 >> amp_ctrl_2 >> enginePtr->audio_out(1);
+
+    // Patching the output of one channel to scope, a utility class to monitor the signal
+    enginePtr->audio_out(0) >> scope >> enginePtr->blackhole();
 }
 
 //--------------------------------------------------------------
-void brennecke::updateFrequency(float& value) {
-    
-    synth.setFrequency(id_sine1, value);
-};
+void brennecke::updateFrequency(const float& value) {
+    pitch_ctrl_1.set(value);
+}
+
+void brennecke::increaseFrequency() {
+    updateFrequency(pitch_ctrl_1.get() + 10);
+}
+
+void brennecke::decreaseFrequency() {
+    updateFrequency(pitch_ctrl_1.get() - 10);
+}
 
 void brennecke::shutdownApp() {
-    soundStream.close();
-    lastBuffer.clear();
-    synth.reset();
+//    soundStream.close();
+//    lastBuffer.clear();
+//    synth.reset();
 }
 

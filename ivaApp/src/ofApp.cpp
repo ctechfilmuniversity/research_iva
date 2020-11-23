@@ -17,7 +17,7 @@ void ofApp::setup(){
     };
     
     enginePtr->listDevices();
-    enginePtr->setDeviceID(1);
+    enginePtr->setDeviceID(AUDIO_DEVICE);
     enginePtr->setup( 44100, 512, 3);
     
     apps[appIndex]->setPDSPengine(std::move(enginePtr));

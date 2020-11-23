@@ -16,7 +16,6 @@
 class brennecke : public ivaApp {
 
 public:
-    
     void setup();
     void update();
     void draw();
@@ -24,27 +23,23 @@ public:
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
-    void mouseDragged(int x, int y, int button);
-    void mousePressed(int x, int y, int button);
-    void mouseReleased(int x, int y, int button);
-    void mouseEntered(int x, int y);
-    void mouseExited(int x, int y);
-    void windowResized(int w, int h);
-    void dragEvent(ofDragInfo dragInfo);
-    void gotMessage(ofMessage msg);
 
     void shutdownApp();
+
 private:
     static constexpr float FUNDAMENTAL_FREQ = 172.5;
+    //static constexpr float SAMPLE_RATE = 44100.0;
+    //static constexpr float AMPLITUDE = 0.5;
     
     // Member functions
     void drawHelpText();
     void setupAudio();
     
-    // function bound to gui element
-    // therefore its scope is defined by ofEvent
-    // see ofEventUtils for further information
+    // We just alter the pitch of the first osc.
+    // Therefore we dont need a parameter to choose which osc right now.
     void updateFrequency(const float& value);
+    void increaseFrequency();
+    void decreaseFrequency();
 
     
     // Member variables
@@ -55,10 +50,11 @@ private:
 
     ofPolyline waveform{};
         
-    pdsp::VAOscillator      osc_1, osc_2, osc_3, osc_4;
-    pdsp::ValueControl      pitch_ctrl_1, pitch_ctrl_2, pitch_ctrl_3, pitch_ctrl_4;
-    pdsp::ParameterAmp      osc_amp;
+    pdsp::ValueControl      pitch_ctrl_1, pitch_ctrl_2;
+    pdsp::ParameterAmp      amp_ctrl_1, amp_ctrl_2;
+
+    pdsp::SineFB            sine_1, sine_2;
+    pdsp::PMPhasor          phasor_1, phasor_2;
     
-    pdsp::Scope scopeTest;
-    
+    pdsp::Scope             scope;
 };
