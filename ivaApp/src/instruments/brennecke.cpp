@@ -136,8 +136,6 @@ void brennecke::decreaseFrequency() {
 }
 
 void brennecke::shutdownApp() {
-//    soundStream.close();
-//    lastBuffer.clear();
-//    synth.reset();
+    // nothing right now
 }
 
