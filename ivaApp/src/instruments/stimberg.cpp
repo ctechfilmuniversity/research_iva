@@ -85,9 +85,7 @@ void stimberg::update()
         }
         
         for (int i = 0; i < 8; i++) {
-            const float tmpAmp = prevAmpVals[i] * 0.8 + newAmp[i] * 0.2;
-            amps[i].set(tmpAmp);
-            prevAmpVals[i] = tmpAmp;
+            amps[i].set(newAmp[i]);
         }
 
     }
@@ -104,11 +102,11 @@ void stimberg::draw()
     // Why is this call necessary? What is the result?
     // Why don't you simply call cam.draw() instead?
     // What might be an additional use case for texture binding?
-//    cam.getTexture().bind();
-//    mesh.draw();
-    
-//    grayImg.draw(680,0);
-//    cam.draw(680,0);
+    //    cam.getTexture().bind();
+    //    mesh.draw();
+
+    //    grayImg.draw(680,0);
+    //    cam.draw(680,0);
     
     // Uncommented becaus we need it to fit into the window
     //    float xScale = ofGetScreenWidth() / cam.getWidth();
@@ -160,17 +158,15 @@ void stimberg::setupAudio() {
             72      // 220 * pow(2.f,(15/12.f))    // ~523 Hz  Midi: 72
     };
 
+    amps.resize(8); // resize and create objects
+    oscs.resize(8);
     for (int i=0; i < 8; i++) {
-        amps.push_back(pdsp::ParameterAmp());
-        oscs.push_back(pdsp::VAOscillator());
-
         pitches[i] >> oscs[i].in_pitch();
         oscs[i].out_sine() >> amps[i] >> enginePtr->audio_out(0);
         oscs[i].out_sine() >> amps[i] >> enginePtr->audio_out(1);
 
-        amps[i].enableSmoothing(50.0f); // 50ms smoothing — solves click sound when stopping this instrument
+        amps[i].enableSmoothing(1000.0f); // 1000ms smoothing — solves clicking noise and also sustains tones.
         amps[i].set(.0f);
-        prevAmpVals.push_back(.0f);
     }
 }
 
