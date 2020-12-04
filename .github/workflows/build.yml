@@ -36,6 +36,17 @@ jobs:
         with:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
+      - name: Checkout ofxPDSP addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxPDSP
+          path: ofx/addons/ofxPDSP
+      - name: Checkout ofxAudioFile addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxAudioFile
+          path: ofx/addons/ofxAudioFile
+          
 
       # # Update poco, a component of ofx (seems not necessary right now)
       # # - name: Update poco (component of ofx)
@@ -112,7 +123,17 @@ jobs:
         with:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
-
+      - name: Checkout ofxPDSP addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxPDSP
+          path: ofx/addons/ofxPDSP
+      - name: Checkout ofxAudioFile addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxAudioFile
+          path: ofx/addons/ofxAudioFile
+      
       # Downloading additional libs for ofx
       - name: Download ofx libs
         run: bash ./ofx/scripts/osx/download_libs.sh
@@ -181,6 +202,16 @@ jobs:
         with:
           repository:  danomatika/ofxMidi
           path: ofx/addons/ofxMidi
+      - name: Checkout ofxPDSP addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxPDSP
+          path: ofx/addons/ofxPDSP
+      - name: Checkout ofxAudioFile addon
+        uses: actions/checkout@v2
+        with:
+          repository:  npisanti/ofxAudioFile
+          path: ofx/addons/ofxAudioFile
 
       - name: Install project generator
         run: |
@@ -196,7 +227,7 @@ jobs:
           ./ofx/projectGenerator/projectGenerator.exe --ofPath="./ofx" -r -p"vs" ./iva/ivaApp
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.1
+        uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Build
         run: |

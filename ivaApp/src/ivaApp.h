@@ -9,15 +9,40 @@
 #define ivaApp_h
 
 #include "ofMain.h"
+#include "ofxPDSP.h"
 
-// TODO: The current implementation is a great step into the direction I would like to go. Nonetheless, I do not want to continue using several apps but rather one app with several visualizations. This will be the next big task for IVAapp from my point of view. Let's put it on the agenda of our next meeting.
-
-class ivaApp : public ofBaseApp {
+//
+class ivaApp {
     
 public:
     virtual void shutdownApp() = 0;
+    
+    virtual void setup(){};
+    virtual void update(){};
+    virtual void draw(){};
 
+    virtual void keyPressed(int key){};
+    virtual void keyReleased(int key){};
+    virtual void mouseMoved(int x, int y ){};
+    virtual void mouseDragged(int x, int y, int button){};
+    virtual void mousePressed(int x, int y, int button){};
+    virtual void mouseReleased(int x, int y, int button){};
+    virtual void mouseEntered(int x, int y){};
+    virtual void mouseExited(int x, int y){};
+    virtual void windowResized(int w, int h){};
+    virtual void dragEvent(ofDragInfo dragInfo){};
+    virtual void gotMessage(ofMessage msg){};
+    
+    unique_ptr<pdsp::Engine> getPDSPengine();
+    void setPDSPengine(unique_ptr<pdsp::Engine> engine);
+
+protected:
+//    ivaApp(unique_ptr<pdsp::Engine> engine) : enginePtr(std::move(engine)){}
+    unique_ptr<pdsp::Engine> enginePtr;
+    
 private:
+//    ivaApp();
+    
 };
 
 #endif /* ivaApp_h */

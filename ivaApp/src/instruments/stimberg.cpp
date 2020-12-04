@@ -4,10 +4,10 @@
 
 void stimberg::setup() {
     ofSetVerticalSync(true);
-//    ofSetFrameRate(60);
+    //    ofSetFrameRate(60);
     cam.setup(640, 480);
     
-//    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    //    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     stepSize = 10;
     ySteps = cam.getHeight() / stepSize;
     xSteps = cam.getWidth() / stepSize;
@@ -25,8 +25,7 @@ void stimberg::setup() {
     flow.setWindowSize(stepSize);
     
     setupAudio();
-    ofHideCursor();
-    setupSynth();
+    //ofHideCursor();
 }
 
 void stimberg::update()
@@ -86,10 +85,8 @@ void stimberg::update()
         }
         
         for (int i = 0; i < 8; i++) {
-            float amp = synth2.getAmplitude(i) * 0.8 + newAmp[i] * 0.2;
-            synth2.setAmplitude(i, amp);
+            amps[i].set(newAmp[i]);
         }
-        
 
     }
 
@@ -105,11 +102,11 @@ void stimberg::draw()
     // Why is this call necessary? What is the result?
     // Why don't you simply call cam.draw() instead?
     // What might be an additional use case for texture binding?
-//    cam.getTexture().bind();
-//    mesh.draw();
-    
-//    grayImg.draw(680,0);
-//    cam.draw(680,0);
+    //    cam.getTexture().bind();
+    //    mesh.draw();
+
+    //    grayImg.draw(680,0);
+    //    cam.draw(680,0);
     
     // Uncommented becaus we need it to fit into the window
     //    float xScale = ofGetScreenWidth() / cam.getWidth();
@@ -144,72 +141,36 @@ void stimberg::draw()
     if (! ofGetMousePressed() )
     {
         //mesh.drawFaces();
-//        mesh.drawWireframe();
+        //        mesh.drawWireframe();
     }
 }
 
-
-
-//--------------------------------------------------------------
-void stimberg::audioOut(ofSoundBuffer &outBuffer) {
-    
-    //synth.updateSoundBuffer(outBuffer);
-    synth2.fillSoundBuffer(outBuffer);
-    
-    // THREAD INFO
-    // lock_name is the "var" name of the lock guard, kind of
-    // a variable that is being constructed with a mutex (audioMutex),
-    // locks the mutex at its construction and unlocks the mutex
-    // when it is being destroyed, i.e., at the end of the scope
-    std::unique_lock<std::mutex> lock_name(audioMutex);
-    lastBuffer = outBuffer;
-}
-
-
-
 //--------------------------------------------------------------
 void stimberg::setupAudio() {
-    
-    // start the sound stream with a sample rate of 44100 Hz, and a buffer
-    // size of 512 samples per audioOut() call
-    ofSoundStreamSettings settings;
-    settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
-    settings.bufferSize = 512;
-    settings.numBuffers = 4;
-    settings.setOutListener(this);
-    
-    // the following setup function initiates the whole audio connection
-    // it invokes the underlying RTAudioSoundStream to
-    // - create an RtAudio object
-    // - connect the object to the RtAudioCallback function
-    // - start the stream and hence have a continious connection to audio in & out
-    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
-}
-
-//--------------------------------------------------------------
-void stimberg::setupSynth() {
-    const std::array<float, 8> frequencies = {
-        110,
-        220 * pow(2.f,(3/12.f)),
-        220 * pow(2.f,(10/12.f)),
-        220 * pow(2.f,(7/12.f)),
-        55,
-        220 * pow(2.f,(19/12.f)),
-        220 * pow(2.f,(14/12.f)),
-        220 * pow(2.f,(15/12.f))
+    const std::array<float, 8> pitches = {
+            45,     // 110,                        //  110 Hz  Midi: 45
+            60,     // 220 * pow(2.f,(3/12.f)),    // ~262 Hz  Midi: 60
+            67,     // 220 * pow(2.f,(10/12.f)),   // ~392 Hz  Midi: 67
+            64,     // 220 * pow(2.f,(7/12.f)),    // ~330 Hz  Midi: 64
+            33,     // 55,                         //   55 Hz  Midi: 33
+            76,     // 220 * pow(2.f,(19/12.f)),   // ~659 Hz  Midi: 76
+            71,     // 220 * pow(2.f,(14/12.f)),   // ~494 Hz  Midi: 71
+            72      // 220 * pow(2.f,(15/12.f))    // ~523 Hz  Midi: 72
     };
-    
-    for (auto frequency : frequencies) {
-        synth2.addOscillator(ofDCO::SINE, synth2.SAMPLE_RATE, frequency, 0.0);
+
+    amps.resize(8); // resize and create objects
+    oscs.resize(8);
+    for (int i=0; i < 8; i++) {
+        pitches[i] >> oscs[i].in_pitch();
+        oscs[i].out_sine() >> amps[i] >> enginePtr->audio_out(0);
+        oscs[i].out_sine() >> amps[i] >> enginePtr->audio_out(1);
+
+        amps[i].enableSmoothing(1000.0f); // 1000ms smoothing — solves clicking noise and also sustains tones.
+        amps[i].set(.0f);
     }
 }
 
 //--------------------------------------------------------------
 void stimberg::shutdownApp(){
-    soundStream.close();
-    lastBuffer.clear();
     cam.close();
-    audioMutex.unlock();
-    synth2.reset();
 }

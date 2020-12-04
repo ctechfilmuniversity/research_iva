@@ -28,13 +28,12 @@ void traber::setup(){
     setupAudio();
 }
 
-// TODO: This function is too large, break it down into readable packages.
 //--------------------------------------------------------------
 void traber::update(){
     // "lastBuffer" is shared between update() and audioOut(), which are called
     // on two different threads. This lock makes sure we don't use lastBuffer
     // from both threads simultaneously (see the corresponding lock in audioOut())
-    std::unique_lock<std::mutex> lock_name(audioMutex);
+    //    std::unique_lock<std::mutex> lock_name(audioMutex);
     
     if (!running) {
         return;
@@ -66,7 +65,7 @@ void traber::update(){
 
 void traber::updateToneAndIndex() {
     calculateToneIndex();
-    synth.setFrequency(0, 220 * pow(2,(synthTones.at(currentToneIndex)/12.f)));
+    pitch_ctrl.set(57 + synthTones.at(currentToneIndex));
     
     //index < fboSize ? index++ : index=0;
     if (index < fboSize) {
@@ -235,43 +234,15 @@ void traber::debugDraw(){
     ofPopMatrix();
 }
 
-
-//--------------------------------------------------------------
-void traber::audioOut(ofSoundBuffer &outBuffer) {
-    synth.fillSoundBuffer(outBuffer);
-    
-    // THREAD INFO
-    // lock_name is the "var" name of the lock guard, kind of
-    // a variable that is being constructed with a mutex (audioMutex),
-    // locks the mutex at its construction and unlocks the mutex
-    // when it is being destroyed, i.e., at the end of the scope
-    std::unique_lock<std::mutex> lock_name(audioMutex);
-    lastBuffer = outBuffer;
-}
-
 //--------------------------------------------------------------
 void traber::setupAudio() {
-    // start the sound stream with a sample rate of 44100 Hz, and a buffer
-    // size of 512 samples per audioOut() call
-    ofSoundStreamSettings settings;
-    settings.numOutputChannels = 2;
-    settings.sampleRate = 44100;
-    settings.bufferSize = 1024; // increased buffer size seems necessary here
-    settings.numBuffers = 4;
-    settings.setOutListener(this);
+    pitch_ctrl >> osc.in_pitch();
+    osc.out_sine() >> osc_amp >> enginePtr->audio_out(0); // connect to left output channel
+    osc.out_sine() >> osc_amp >> enginePtr->audio_out(1); // connect to right right channel
     
-    // the following setup function initiates the whole audio connection
-    // it invokes the underlying RTAudioSoundStream to
-    // - create an RtAudio object
-    // - connect the object to the RtAudioCallback function
-    // - start the stream and hence have a continious connection to audio in & out
-    soundStream.setup(settings); // RtAudioCallback is called by Apple's CoreAudio
-    
-    synth.addOscillator(ofDCO::SINE);
-    synth.setSampleRate(0, settings.sampleRate);
-}
-
-void traber::keyPressed(int key){
+    //pitch_ctrl.enableSmoothing(50.0f); // 50ms smoothing — quick changes to pitch seem to work fine with pdsp without smoothing enabled
+    osc_amp.enableSmoothing(50.0f); // 50ms smoothing — solves click sound when stopping this instrument
+    osc_amp.set(.5f);
 }
 
 //--------------------------------------------------------------
@@ -297,10 +268,9 @@ void traber::changeRecordMode(const bool mode) {
 void traber::changeRunning(const bool run) {
     running = run;
     if (running) {
-        //synth.setAmplitude(0, ofSynth2::AMPLITUDE);
-        synth.setAmplitude(0, 0.5);
+        osc_amp.set(.5f);
     } else {
-        synth.setAmplitude(0, 0);
+        osc_amp.set(.0f);
     }
 }
 
@@ -316,46 +286,8 @@ void traber::resetToStart() {
 }
 
 //--------------------------------------------------------------
-void traber::mouseMoved(int x, int y ){
-}
-
-//--------------------------------------------------------------
-void traber::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void traber::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void traber::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void traber::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void traber::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void traber::dragEvent(ofDragInfo dragInfo){
-
-}
-
-//--------------------------------------------------------------
 void traber::shutdownApp(){
-    soundStream.close();
-    lastBuffer.clear();
     grabber.close();
     fbo.clear();
     grayImage.clear();
-    audioMutex.unlock();
-    synth.reset();
 }

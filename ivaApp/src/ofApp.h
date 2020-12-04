@@ -1,14 +1,16 @@
 #pragma once
 
 #include "ofMain.h"
-#include "synth/ofSynth.h"
-#include "apps/brennecke.hpp"
-#include "apps/clausen.hpp"
-#include "apps/traber.h"
-#include "apps/stimberg.h"
-#include "apps/dittmann.h"
-#include "apps/objectContours.hpp"
+#include "instruments/brennecke.hpp"
+#include "instruments/clausen.hpp"
+#include "instruments/traber.h"
+#include "instruments/stimberg.h"
+#include "instruments/dittmann.h"
+#include "instruments/objectContours.hpp"
 
+// you possibly need to adapt this number for your hardware
+// look for your index in the console output when starting
+#define AUDIO_DEVICE 1
 
 class ofApp : public ofBaseApp {
 
@@ -34,5 +36,7 @@ private:
     int appIndex = 0;
     std::vector<ivaApp*> apps;
     
+    unique_ptr<pdsp::Engine> enginePtr;
     void switchApp(int key);
+    void resetPDSPengine();
 };
