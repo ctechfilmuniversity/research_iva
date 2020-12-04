@@ -8,11 +8,9 @@ void ofApp::setup(){
         new brennecke(),
 //        new clausen(),
 //        new traber(),
-//        new stimberg(),
+        new stimberg(),
 //        new dittmann(),
 //        new objectContours()
-
-        //new traber(std::move(enginePtr))
         new traber()
     };
     

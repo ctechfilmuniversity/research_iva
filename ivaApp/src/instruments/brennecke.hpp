@@ -8,8 +8,6 @@
 
 #pragma once
 
-//#include "ofMain.h"
-#include "ofSynth2.hpp"
 #include "ivaApp.h"
 
 
