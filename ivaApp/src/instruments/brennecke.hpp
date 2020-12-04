@@ -41,13 +41,11 @@ private:
 
     
     // Member variables
-    float rms{};
+    //float rms{};
 
     bool changeFreq{false};
     int initialMouseDistY{};
 
-    ofPolyline waveform{};
-        
     pdsp::ValueControl      pitch_ctrl_1, pitch_ctrl_2;
     pdsp::ParameterAmp      amp_ctrl_1, amp_ctrl_2;
 
