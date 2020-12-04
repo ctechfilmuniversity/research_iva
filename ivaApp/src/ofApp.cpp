@@ -6,11 +6,10 @@ void ofApp::setup(){
     enginePtr = unique_ptr<pdsp::Engine> (new pdsp::Engine);
     apps = {
         new brennecke(),
-//        new clausen(),
-//        new traber(),
+        // new clausen(),
+        // new dittmann(),
+        // new objectContours(),
         new stimberg(),
-//        new dittmann(),
-//        new objectContours()
         new traber()
     };
     
