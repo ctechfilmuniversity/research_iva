@@ -1,14 +1,12 @@
-    // Source:
-    // https://github.com/wearenocomputer/workshop
+// Source:
+// https://github.com/wearenocomputer/workshop
 
 
 #pragma once
 
-//#include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ivaApp.h"
 
-//class clausen : public ofBaseApp{
 class clausen : public ivaApp {
 public:
     

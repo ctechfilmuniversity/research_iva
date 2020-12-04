@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ofxOpenCv.h"
-#include "ofSynth2.hpp"
 #include "ivaApp.h"
 #include "ofxPDSP.h"
 

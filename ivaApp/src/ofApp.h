@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "synth/ofSynth.h"
 #include "instruments/brennecke.hpp"
 #include "instruments/clausen.hpp"
 #include "instruments/traber.h"
