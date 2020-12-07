@@ -72,16 +72,12 @@ void brennecke::keyReleased(int key){
 void brennecke::mouseMoved(int x, int y ){
 
     if (changeFreq) {
-        
         int currentMouseDistY = y - ofGetWindowPositionY();
         
         // only if we have actually moved the mouse
         if (currentMouseDistY != initialMouseDistY) {
             if (currentMouseDistY > initialMouseDistY) increaseFrequency();
             if (currentMouseDistY < initialMouseDistY) decreaseFrequency();
-            
-            float frequency = ofClamp(pitch_ctrl_1.get(), 0.0, 20000.0);
-            updateFrequency(frequency);
             
             initialMouseDistY = currentMouseDistY;
         }
@@ -124,7 +120,8 @@ void brennecke::setupAudio() {
 
 //--------------------------------------------------------------
 void brennecke::updateFrequency(const float& value) {
-    pitch_ctrl_1.set(value);
+    float frequency = ofClamp(value, 0.0, 20000.0);
+    pitch_ctrl_1.set(frequency);
 }
 
 void brennecke::increaseFrequency() {
