@@ -61,7 +61,7 @@ Description missing on how sound is generated. The visualization on the right si
 
 ![Dittmann](screenshots/05_dittmann.png)
 
-### Object contours (not implemented at the moment)
+### Object contours
 Based on an ofxOpenCV example this instruments recognizes contours of objects in front of the webcam. It has different modes to generate sound, where area and y-position of a contour can have an influence on the sound generation.
 
 ![Object contours](screenshots/06_objectContours.png)

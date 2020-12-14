@@ -10,7 +10,8 @@ void ofApp::setup(){
         // new dittmann(),
         // new objectContours(),
         new stimberg(),
-        new traber()
+        new traber(),
+        new objectContours()
     };
     
     enginePtr->listDevices();
