@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>IVA — Interactive Visual Audio</title>
+    
+    <style>
+        select {
+            margin-bottom: 30px;
+        }
+        iframe {
+            border: 0;
+            width: 100%;
+            height: 75vh;
+            min-width: 600px;
+            min-height: 400px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <header>
+        <h1>IVA — Interactive Visual Audio</h1>
+        <select>
+        </select>
+    </header>
+    
+    <iframe src=""></iframe>
+    
+
+    <script>
+        (function() {
+            const initialAppIndex = 1;
+            const selector = document.querySelector('select');
+            const iframe = document.querySelector('iframe');
+
+            let apps = [
+                "none",
+                "traber"
+            ]
+
+            apps.forEach(app => {
+                let opt = document.createElement('OPTION');
+                opt.innerText = app;
+                selector.appendChild(opt);
+            });
+
+            iframe.src = './' + apps[initialAppIndex];
+            selector.value = apps[initialAppIndex];
+
+            selector.onchange = function() {
+                iframe.src = './' + this.value;
+            };
+        })();
+    </script> 
+</body>
+</html>
