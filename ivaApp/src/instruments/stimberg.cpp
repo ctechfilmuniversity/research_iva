@@ -50,7 +50,7 @@ void stimberg::update()
             for(int x = 1; x + 1 < xSteps; x++)
             {
                 
-                int i = y * xSteps + x;
+                i = y * xSteps + x;
                 glm::vec2 position(x * stepSize, y * stepSize);
                 ofRectangle area(position - glm::vec2(stepSize, stepSize) / 2, stepSize, stepSize);
                 ofVec2f offset = flow.getAverageFlowInRegion(area);

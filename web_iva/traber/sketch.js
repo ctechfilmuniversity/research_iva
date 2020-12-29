@@ -1,8 +1,8 @@
 let cam, col, currentToneIndex = 0, slitIdx=0;
 const IVA_WIDTH = 600, IVA_HEIGHT = 480;
-const tones = ["E3", "G3", "A3", "C4", "D4", "E4"];
+const tones = ['E3', 'G3', 'A3', 'C4', 'D4', 'E4'];
 
-const osc = new Tone.Oscillator("E3", "sine").toDestination().start();
+const osc = new Tone.Oscillator('E3', 'sine').toDestination().start();
 
 function setup() {
   createCanvas(IVA_WIDTH, IVA_HEIGHT);
