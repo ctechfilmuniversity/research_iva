@@ -68,12 +68,12 @@ function flowVectorOutput() {
 
       
       // generating sound
-      if (zone.u == 0 || zone.v == 0) return;
+      let offset = createVector(zone.u, zone.v).mag().toFixed(2);
+      if (offset < 5) return; // ignore very small flow changes
 
       // calc angle
       translate(zone.x, zone.y);
       let angle = atan2(zone.v, zone.u); // radians y, x
-      let offset = createVector(zone.u, zone.v).mag().toFixed(2);
       translate(- zone.x, - zone.y);
 
       angle = degrees(angle).toFixed(0) // to degrees
@@ -96,7 +96,7 @@ function flowVectorOutput() {
 
     for (let i = 0; i < 8; i++) {
       //amps[i].set(newAmp[i]);
-      gainNodes[i].gain.rampTo(newAmp[i], .2); // change gain within 1 second
+      gainNodes[i].gain.rampTo(newAmp[i], 1); // change gain within x amount of seconds
     }
   }
 }
