@@ -30,6 +30,11 @@ In this repository we will pursue research ideas on
 ## How to contribute
 Please refer to the instructions in our [wiki](https://github.com/ctechfilmuniversity/research_iva/wiki#how-to-contribute-code).
 
+## Tech Requirements
+
+openFrameworks v0.11.0
+
+
 ## How to use
 Use the number keys to switch between apps. Further instructions for each instrument is available on execution.
 
